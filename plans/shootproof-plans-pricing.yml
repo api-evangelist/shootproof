@@ -1,0 +1,138 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: ShootProof
+providerId: shootproof
+created: '2026-07-04'
+modified: '2026-07-04'
+reconciled: false
+tags:
+- Photography
+- Client Galleries
+- Studio Management
+- Plans
+description: >-
+  ShootProof sells subscription plans to photography studios, tiered mainly on
+  active photo/storage capacity, not on API usage. The Studio API comes free
+  of charge with any ShootProof account - a client ID is issued by ShootProof
+  support on request, and Studio API access is not gated behind a specific
+  plan tier. The tiers below are the studio subscription plans that an API
+  integration ultimately operates on behalf of.
+notes: >-
+  Prices shown are list prices for the annual/monthly billing options
+  published on shootproof.com/pricing at review time and are not reconciled
+  against ShootProof's live pricing page. The Studio API itself has no
+  separate line-item fee.
+sources:
+- https://www.shootproof.com/pricing
+- https://developer.shootproof.com/
+- https://developer.shootproof.com/guide/authorization/
+plans:
+- id: shootproof-free
+  name: Free
+  type: free
+  description: >-
+    Free-forever plan for photographers getting started - up to 100 active
+    photos (up to 5 GB), unlimited galleries, a portfolio website, mobile app
+    access for up to 5 galleries, basic invoicing, contracts, and e-sign.
+  entries:
+  - label: Active Photos
+    name: free_active_photos
+    type: usage
+    metric: photos
+    limit: 100
+    timeFrame: account
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  elements:
+  - name: Unlimited Galleries
+  - name: Portfolio Website
+  - name: Contracts and E-Sign
+  - name: Basic Invoicing
+- id: shootproof-1500
+  name: '1,500 Plan'
+  type: paid
+  description: >-
+    Entry paid tier - up to 1,500 active photos (up to 75 GB), unlimited
+    mobile app access, invoicing, contracts, e-sign, and commission-free
+    print/product sales.
+  entries:
+  - label: Active Photos
+    name: plan_1500_active_photos
+    type: usage
+    metric: photos
+    limit: 1500
+    timeFrame: account
+    geo: global
+    unit: 1
+    price: $10.99/mo billed annually ($12.99/mo billed monthly)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Mobile App Access
+  - name: Commission-Free Sales
+  - name: Online Booking
+- id: shootproof-5000
+  name: '5,000 Plan'
+  type: paid
+  description: >-
+    Mid tier - up to 5,000 active photos (up to 250 GB), with the same feature
+    set as the 1,500 plan at higher capacity.
+  entries:
+  - label: Active Photos
+    name: plan_5000_active_photos
+    type: usage
+    metric: photos
+    limit: 5000
+    timeFrame: account
+    geo: global
+    unit: 1
+    price: $19.99/mo billed annually ($21.99/mo billed monthly)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Mobile App Access
+  - name: Commission-Free Sales
+- id: shootproof-25000
+  name: '25,000 Plan'
+  type: paid
+  description: >-
+    High-volume tier - up to 25,000 active photos (up to 1,250 GB) for
+    high-output studios.
+  entries:
+  - label: Active Photos
+    name: plan_25000_active_photos
+    type: usage
+    metric: photos
+    limit: 25000
+    timeFrame: account
+    geo: global
+    unit: 1
+    price: $26.67/mo billed annually ($31.99/mo billed monthly)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Mobile App Access
+  - name: Commission-Free Sales
+- id: shootproof-unlimited
+  name: Unlimited
+  type: paid
+  description: >-
+    Top tier - unlimited active photos and storage, plus included archiving.
+  entries:
+  - label: Active Photos
+    name: plan_unlimited_active_photos
+    type: usage
+    metric: photos
+    limit: -1
+    timeFrame: account
+    geo: global
+    unit: 1
+    price: $50/mo billed annually ($60/mo billed monthly)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Storage
+  - name: Included Archiving
+  - name: Commission-Free Sales
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

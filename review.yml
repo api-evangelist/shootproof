@@ -1,0 +1,196 @@
+aid: shootproof
+name: ShootProof
+review:
+  question: Does ShootProof expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-04'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. ShootProof's public Studio API
+    (developer.shootproof.com) is a RESTful, hypermedia (HAL-style `links`)
+    API secured with three-legged OAuth 2.0 - pure request/response over
+    HTTPS. There is no server-push transport (WebSocket or SSE) documented
+    anywhere in the live OpenAPI 3.0 document (oas/studio.json) or the
+    developer guide, so there is no async surface on ShootProof's own API to
+    model with AsyncAPI.
+  findings:
+    summary: |
+      ShootProof does not publish a documented public WebSocket API. The
+      ShootProof Studio API (base https://api.shootproof.com/studio) is a
+      RESTful, hypermedia-driven API - every response carries HAL-style
+      `links` objects that clients follow to discover further actions -
+      authenticated via three-legged OAuth 2.0 (authorization code grant),
+      with Bearer access tokens valid for two weeks and long-lived refresh
+      tokens. ShootProof publishes a live, downloadable OpenAPI 3.0 document
+      at https://developer.shootproof.com/oas/studio.json which, at review
+      time, defines 157 paths and 181 schemas across Brands (Studios),
+      Contacts (Clients), Contracts, Email, Events (galleries/shoots and
+      their Albums and Photos), Invoices, Music (Triple Scoop Music
+      integration), Orders (beta), Price Sheets, and account/MFA/notification
+      endpoints. All of it is standard REST - GET/POST/PUT/PATCH/DELETE over
+      HTTPS, including dedicated batch PATCH/DELETE endpoints for bulk
+      operations on events, albums, photos, and price-sheet items/groups.
+      Photo delivery uses a redirect-to-signed-URL pattern
+      (GET .../photo/{id}/original) and zip-bundle download links rather than
+      any push/streaming transport. A separate legacy REST API
+      (developer.shootproof.com/legacy/) remains documented for older
+      integrations, also plain REST. No ws:// or wss:// endpoint, Server-Sent
+      Events stream, or webhook subscription mechanism is documented on
+      either the current Studio API or the legacy API as of the review date.
+    openSource: |
+      The Studio API itself is closed-source/hosted (SaaS), but ShootProof
+      publishes client tooling on GitHub (github.com/ShootProof), including a
+      PHP SDK (ShootProof/php-sdk) and a command-line client
+      (ShootProof/shootproof-cli) that wrap the REST API. API access is
+      included free with any ShootProof account; developers obtain a client
+      ID by contacting ShootProof support with their application's redirect
+      URLs and branding assets.
+    transports:
+      - protocol: REST
+        scheme: https
+        baseURL: https://api.shootproof.com/studio
+        documented: true
+        note: Studio API. RESTful, hypermedia (HAL-style links), OAuth 2.0 Bearer auth. Live OpenAPI 3.0 doc at /oas/studio.json.
+      - protocol: REST
+        scheme: https
+        documented: true
+        note: Separate Legacy API still documented at developer.shootproof.com/legacy/ for older integrations.
+      - protocol: Redirect / Signed URL
+        scheme: https
+        documented: true
+        note: GET .../photo/{eventPhotoId}/original issues a 302 redirect to a temporary signed URL for the original file; zip-bundle endpoints return download links the same way.
+      - protocol: WebSocket
+        scheme: wss
+        documented: false
+        note: No WebSocket endpoint is documented anywhere in the Studio API OpenAPI document, the developer guide, or the legacy API docs as of the review date.
+      - protocol: Server-Sent Events
+        scheme: https
+        documented: false
+        note: No SSE stream is documented on either API.
+    endpointsConfirmed:
+      - GET    https://api.shootproof.com/studio/
+      - GET    https://api.shootproof.com/studio/brand
+      - GET    https://api.shootproof.com/studio/brand/{brandId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/brand-theme
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/brand-theme/{brandThemeId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/brand-theme/{brandThemeId}
+      - PUT    https://api.shootproof.com/studio/brand/{brandId}/brand-theme/{brandThemeId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/homepage
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/homepage
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/watermark
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/sales-history
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/lab-order-summary
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/gallery-activity-summary
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/affiliate-program-summary
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event-category
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event-category
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/digital-rule
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/digital-rule
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/qr-code
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/qr-code
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/contact/{contactId}
+      - PUT    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/contact/{contactId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/contact/{contactId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo/upload-policy
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo/{eventPhotoId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo/{eventPhotoId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo/{eventPhotoId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/photo/{eventPhotoId}/original
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}/photo
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}/photo
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/album/{eventAlbumId}/zip-bundle
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/event/{eventId}/zip-bundle
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contact
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/contact
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contact/tag
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contact/{contactId}
+      - PUT    https://api.shootproof.com/studio/brand/{brandId}/contact/{contactId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/contact/{contactId}
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/contact/{contactId}/email
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contact/{contactId}/recent-activity
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/order
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/order
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}/item
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}/item
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}/email
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}/lab-shipment
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/order/{orderId}/payment
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contract
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/contract
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contract/template
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/contract/template
+      - GET    https://api.shootproof.com/studio/brand/{brandId}/contract/{contractId}
+      - PATCH  https://api.shootproof.com/studio/brand/{brandId}/contract/{contractId}
+      - PUT    https://api.shootproof.com/studio/brand/{brandId}/contract/{contractId}
+      - DELETE https://api.shootproof.com/studio/brand/{brandId}/contract/{contractId}
+      - POST   https://api.shootproof.com/studio/brand/{brandId}/contract/{contractId}/email
+    endpointsModeled:
+      - note: >-
+          The 55 endpoints above were verified live from ShootProof's
+          published OpenAPI 3.0 document (oas/studio.json, 157 paths total
+          across all tags). Request/response schema field names in
+          openapi/shootproof-openapi.yml were simplified/modeled for
+          catalog readability rather than copied field-for-field from all
+          181 real schemas; the endpoint surface (methods and paths) is
+          confirmed real, not invented.
+  sources:
+    - url: https://developer.shootproof.com/
+      type: Documentation
+      note: ShootProof for Developers portal overview.
+    - url: https://developer.shootproof.com/guide/
+      type: Documentation
+      note: Developer guide - authentication, authorization, batch operations, collections, entities, errors, HTTP methods, hypermedia, link relations, media types.
+    - url: https://developer.shootproof.com/guide/authorization/
+      type: Documentation
+      note: OAuth 2.0 authorization code flow, scopes, 2-week access token lifetime, refresh tokens.
+    - url: https://developer.shootproof.com/guide/errors/
+      type: Documentation
+      note: Error format (RFC 7807 problem+json) and documented status codes 400/409/507; no rate-limit status documented.
+    - url: https://developer.shootproof.com/guide/hypermedia/
+      type: Documentation
+      note: HAL-style links object and link-relation conventions on every response.
+    - url: https://developer.shootproof.com/oas/studio.json
+      type: OpenAPI
+      note: Live OpenAPI 3.0 document - 157 paths, 181 schemas, OAuth2 security scheme with 5 scopes, confirmed no WebSocket/SSE.
+    - url: https://developer.shootproof.com/reference/studio/
+      type: APIReference
+      note: Reference index across Authenticated User, Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Other, Price Sheets, Service Description.
+    - url: https://developer.shootproof.com/legacy/
+      type: Documentation
+      note: Separate legacy REST API, still documented for older integrations.
+    - url: https://github.com/ShootProof
+      type: SourceCode
+      note: GitHub organization publishing php-sdk and shootproof-cli client libraries for the Studio API.
+    - url: https://www.shootproof.com/pricing
+      type: Other
+      note: Studio subscription plans (Free, 1,500, 5,000, 25,000, Unlimited) - the API itself is free with any account.
+  actions:
+    asyncapiPath: null
+    apisYmlUpdated: true
+    reason: |
+      No WebSocket or other server-push protocol surface exists on
+      ShootProof's Studio API or legacy API. Both are request/response REST
+      over HTTPS with OAuth 2.0 Bearer authentication, hypermedia links for
+      navigation, and redirect-to-signed-URL delivery for photo originals and
+      zip bundles. No AsyncAPI document was created because there is no
+      async transport on ShootProof's own API to model.

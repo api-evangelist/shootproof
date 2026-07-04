@@ -1,0 +1,101 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: ShootProof
+providerId: shootproof
+created: '2026-07-04'
+modified: '2026-07-04'
+reconciled: false
+tags:
+- Photography
+- Client Galleries
+- Studio Management
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of ShootProof spend. The dominant cost is the studio's monthly
+  or annual subscription plan, priced on active photo count / storage
+  capacity (Free through Unlimited). The Studio API itself carries no
+  separate metered fee - it is included with any account once a client ID is
+  issued by ShootProof support. Secondary, usage-linked costs flow through the
+  platform rather than the API: print/product order fulfillment through
+  partner labs (paid by end clients at checkout, with ShootProof taking no
+  commission on paid plans), payment processing on invoices/orders, and
+  optional Triple Scoop Music licensing accessed via the Music endpoints.
+notes: >-
+  Per-unit lab fulfillment and payment-processing rates are not reconciled
+  here; verify current studio plan pricing at shootproof.com/pricing and lab
+  costs inside the Studio Panel. FOCUS columns below model the subscription
+  as the primary billed line item.
+sources:
+- https://www.shootproof.com/pricing
+- https://developer.shootproof.com/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: ShootProof
+serviceCategory: Photography SaaS and E-Commerce
+billingModel:
+  pricingCategory: Subscription
+  billingFrequency: Monthly or Annual
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: ShootProof Studio Subscription
+  ServiceCategory: Photography SaaS and E-Commerce
+  ProviderName: ShootProof
+  PublisherName: ShootProof
+  InvoiceIssuerName: ShootProof
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Subscription
+meters:
+- name: active_photos
+  description: Active photos stored across a studio's brands, the primary metric that determines subscription tier.
+  unit: photos
+  aggregation: max
+  dimensions:
+  - account
+  - brand
+- name: storage_bytes
+  description: Storage consumed by event/album photos, bundled with the active-photo allowance per plan.
+  unit: bytes
+  aggregation: max
+  dimensions:
+  - account
+  - brand
+- name: order_revenue
+  description: Print/product order revenue processed through orders and invoices; ShootProof takes no commission on paid plans.
+  unit: currency
+  aggregation: sum
+  dimensions:
+  - account
+  - brand
+  - order
+- name: music_license_usage
+  description: Triple Scoop Music tracks licensed via the Music playlist/song-search endpoints, where applicable.
+  unit: tracks
+  aggregation: count
+  dimensions:
+  - account
+  - playlist
+principles:
+- name: Visibility
+  description: Track active-photo count and storage against the current plan's allowance to anticipate the next tier upgrade or overage.
+- name: Allocation
+  description: Attribute subscription and lab-fulfillment cost to individual brands/studios when an integration manages multiple ShootProof brands.
+- name: Optimization
+  description: Archive or delete stale event photos to stay under a lower-cost plan tier; use zip-bundle and digital-rule endpoints to control delivery instead of duplicating storage.
+- name: Accountability
+  description: Assign a plan owner per studio account and review active-photo usage against the FOCUS active_photos meter monthly.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

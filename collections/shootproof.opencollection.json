@@ -1,0 +1,204 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Studios", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List a studio's brands.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.shootproof.com/studio/brand" },
+          "docs": "Lists all of a studio's brands."
+        },
+        {
+          "info": { "name": "Get a brand.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ]
+          },
+          "docs": "Retrieves a brand by ID."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Events & Galleries", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List a brand's events.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ]
+          },
+          "docs": "Lists all events (client galleries/shoots) for a brand."
+        },
+        {
+          "info": { "name": "Create an event.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"Smith Wedding\",\n  \"eventDate\": \"2026-09-12\"\n}" }
+          },
+          "docs": "Creates a new event."
+        },
+        {
+          "info": { "name": "List an event's albums.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "eventId", "value": "", "type": "path", "description": "The ID of the event." }
+            ]
+          },
+          "docs": "Lists all albums nested inside an event."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Photos", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List all event photos.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "eventId", "value": "", "type": "path", "description": "The ID of the event." }
+            ]
+          },
+          "docs": "Lists all photos uploaded to an event."
+        },
+        {
+          "info": { "name": "Generate a photo upload policy.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/upload-policy",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "eventId", "value": "", "type": "path", "description": "The ID of the event." }
+            ]
+          },
+          "docs": "Generates a signed upload policy for uploading photo bytes directly to storage."
+        },
+        {
+          "info": { "name": "Get a photo's original file.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/:eventPhotoId/original",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "eventId", "value": "", "type": "path", "description": "The ID of the event." },
+              { "name": "eventPhotoId", "value": "", "type": "path", "description": "The ID of the event photo." }
+            ]
+          },
+          "docs": "Redirects to a temporary signed URL for the photo's original image."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Clients", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List a brand's contacts.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ]
+          },
+          "docs": "Lists all contacts (clients) for a brand."
+        },
+        {
+          "info": { "name": "Create a contact.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\"\n}" }
+          },
+          "docs": "Creates a new contact."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Orders", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List orders for the current brand.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/order",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ]
+          },
+          "docs": "Lists all orders for a brand."
+        },
+        {
+          "info": { "name": "Get a single order.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/order/:orderId",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "orderId", "value": "", "type": "path", "description": "The ID of the order." }
+            ]
+          },
+          "docs": "Returns a single order by ID."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Contracts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List a brand's contracts.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." }
+            ]
+          },
+          "docs": "Lists all contracts for a brand."
+        },
+        {
+          "info": { "name": "Send a contract email.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/:contractId/email",
+            "params": [
+              { "name": "brandId", "value": "", "type": "path", "description": "The ID of the brand." },
+              { "name": "contractId", "value": "", "type": "path", "description": "The ID of the contract." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"subject\": \"Please review and sign your contract\",\n  \"body\": \"Your contract is ready for signature.\"\n}" }
+          },
+          "docs": "Sends the contract to its associated contacts by email for review and e-signature."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

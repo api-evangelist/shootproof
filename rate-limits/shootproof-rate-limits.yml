@@ -1,0 +1,66 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: ShootProof
+providerId: shootproof
+created: '2026-07-04'
+modified: '2026-07-04'
+reconciled: false
+tags:
+- Photography
+- Client Galleries
+- Rate Limiting
+- Quotas
+description: >-
+  ShootProof's public Studio API guide (Guide > Errors) documents 400, 409,
+  and 507 (Insufficient Storage - a plan-capacity error, not a rate-limit
+  error) as its notable status codes, but does not publish a numeric
+  requests-per-second/minute rate limit, a 429 Too Many Requests convention,
+  or documented `Retry-After`/rate-limit response headers as of the review
+  date. Access tokens are Bearer tokens issued via three-legged OAuth 2.0 and
+  are valid for two weeks (1,209,600 seconds); refresh tokens are used to
+  obtain new access tokens without user interaction.
+notes: >-
+  No numeric per-account or per-endpoint throttling limits are documented.
+  Batch endpoints (e.g. batch update/delete of events, albums, photos, price
+  sheet items) exist across the API specifically to reduce request volume for
+  bulk operations, which suggests request volume is a practical concern even
+  though no fixed cap is published. Verify current throttling behavior with
+  ShootProof support (support@shootproof.com) before building high-volume
+  integrations.
+sources:
+- https://developer.shootproof.com/guide/errors/
+- https://developer.shootproof.com/guide/authorization/
+- https://developer.shootproof.com/guide/
+- https://developer.shootproof.com/oas/studio.json
+responseCodes:
+  throttled: not published
+limits:
+- name: Studio API Requests
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the Studio API.
+- name: Access Token Lifetime
+  scope: token
+  metric: seconds
+  limit: '1209600'
+  notes: OAuth 2.0 access tokens last two weeks (14 days); refresh tokens obtain new access tokens thereafter.
+- name: Storage / Active Photo Capacity
+  scope: account
+  metric: photos_and_bytes
+  limit: per subscription plan
+  notes: Exceeding a plan's active-photo/storage allowance returns HTTP 507 Insufficient Storage rather than a rate-limit error.
+- name: Batch Operation Size
+  scope: request
+  metric: items
+  limit: not published per call, but batch endpoints exist for events/albums/photos/price-sheet items/groups
+  notes: Batch PATCH/DELETE endpoints let clients update or remove many resources in a single call instead of looping per-item requests.
+policies:
+- name: Backoff Strategy
+  description: Not formally documented; standard practice is exponential backoff with jitter on 5xx responses and re-authentication on 401.
+- name: Token Rotation
+  description: Access and refresh tokens must be treated like a user's password and encrypted at rest per the Authorization guide.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

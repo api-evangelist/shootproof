@@ -1,0 +1,171 @@
+{
+  "info": {
+    "name": "ShootProof Studio API",
+    "description": "Curated collection covering the Studios, Events & Galleries, Photos, Clients, Orders, and Contracts resources of ShootProof's Studio API. Base URL: https://api.shootproof.com/studio. Authorization: OAuth 2.0 (authorization code grant), Bearer access token valid for 2 weeks.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{bearerToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.shootproof.com/studio", "type": "string" },
+    { "key": "bearerToken", "value": "", "type": "string" },
+    { "key": "brandId", "value": "", "type": "string" },
+    { "key": "eventId", "value": "", "type": "string" },
+    { "key": "eventAlbumId", "value": "", "type": "string" },
+    { "key": "eventPhotoId", "value": "", "type": "string" },
+    { "key": "contactId", "value": "", "type": "string" },
+    { "key": "orderId", "value": "", "type": "string" },
+    { "key": "contractId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Studios",
+      "item": [
+        {
+          "name": "List a studio's brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand", "host": ["{{baseUrl}}"], "path": ["brand"] }
+          }
+        },
+        {
+          "name": "Get a brand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events & Galleries",
+      "item": [
+        {
+          "name": "List a brand's events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event"] }
+          }
+        },
+        {
+          "name": "Create an event",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Smith Wedding\",\n  \"eventDate\": \"2026-09-12\"\n}" },
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event"] }
+          }
+        },
+        {
+          "name": "List an event's albums",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event/{{eventId}}/album", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event", "{{eventId}}", "album"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": [
+        {
+          "name": "List all event photos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event/{{eventId}}/photo", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event", "{{eventId}}", "photo"] }
+          }
+        },
+        {
+          "name": "Generate a photo upload policy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event/{{eventId}}/photo/upload-policy", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event", "{{eventId}}", "photo", "upload-policy"] }
+          }
+        },
+        {
+          "name": "Get a photo's original file (redirect)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/event/{{eventId}}/photo/{{eventPhotoId}}/original", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "event", "{{eventId}}", "photo", "{{eventPhotoId}}", "original"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "List a brand's contacts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/contact", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "contact"] }
+          }
+        },
+        {
+          "name": "Create a contact",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/contact", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "contact"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List orders for the current brand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/order", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "order"] }
+          }
+        },
+        {
+          "name": "Get a single order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/order/{{orderId}}", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "order", "{{orderId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contracts",
+      "item": [
+        {
+          "name": "List a brand's contracts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/contract", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "contract"] }
+          }
+        },
+        {
+          "name": "Send a contract email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"subject\": \"Please review and sign your contract\",\n  \"body\": \"Your contract is ready for signature.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/brand/{{brandId}}/contract/{{contractId}}/email", "host": ["{{baseUrl}}"], "path": ["brand", "{{brandId}}", "contract", "{{contractId}}", "email"] }
+          }
+        }
+      ]
+    }
+  ]
+}
