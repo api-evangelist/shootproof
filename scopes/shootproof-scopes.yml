@@ -1,0 +1,41 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/shootproof-openapi.yml
+schemes:
+- name: shootProofAuth
+  source: openapi/shootproof-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+    tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+scopes:
+- scope: studio
+  description: read and write access to your Studio Panel data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/shootproof-openapi.yml
+- scope: studio.brand.read-only
+  description: read access to your Studio Panel Brand data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/shootproof-openapi.yml
+- scope: studio.info.read-only
+  description: read access to your Studio Panel account data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/shootproof-openapi.yml
+- scope: studio.order.lab-shipment.read-write
+  description: read and write access to your Studio Panel Order shipment data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/shootproof-openapi.yml
+- scope: studio.order.read-write
+  description: read and write access to your Studio Panel Order data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/shootproof-openapi.yml

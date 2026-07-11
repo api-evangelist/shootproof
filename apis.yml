@@ -149,6 +149,10 @@ apis:
     and associated contacts, and emailing a contract to its contacts for
     review and e-signature.
 common:
+- type: Authentication
+  url: authentication/shootproof-authentication.yml
+- type: OAuthScopes
+  url: scopes/shootproof-scopes.yml
 - type: GitHubOrganization
   url: https://github.com/ShootProof
 - type: LinkedIn
@@ -163,6 +167,8 @@ common:
   url: rate-limits/shootproof-rate-limits.yml
 - type: FinOps
   url: finops/shootproof-finops.yml
+- url: https://www.shootproof.com/blog/feed/
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
