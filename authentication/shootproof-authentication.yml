@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/shootproof-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: shootProofAuth
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+    tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+    scopes: 5
+  sources:
+  - openapi/shootproof-openapi.yml
