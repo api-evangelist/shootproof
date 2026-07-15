@@ -149,6 +149,8 @@ apis:
     and associated contacts, and emailing a contract to its contacts for
     review and e-signature.
 common:
+- type: AgenticAccess
+  url: agentic-access/shootproof-agentic-access.yml
 - type: DomainSecurity
   url: security/shootproof-domain-security.yml
 - type: Authentication
