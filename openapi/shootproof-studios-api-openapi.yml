@@ -1,0 +1,314 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients Studios API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Studios
+  description: Brands, brand themes, homepage settings, watermarks, and summary reports.
+paths:
+  /brand:
+    get:
+      operationId: listBrands
+      tags:
+      - Studios
+      summary: List all of a studio's brands
+      responses:
+        '200':
+          description: A collection of brands.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Brand'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrand
+      tags:
+      - Studios
+      summary: Get a brand
+      responses:
+        '200':
+          description: The requested brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateBrandPartial
+      tags:
+      - Studios
+      summary: Partially update a brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandInput'
+      responses:
+        '200':
+          description: The updated brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/brand-theme:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listBrandThemes
+      tags:
+      - Studios
+      summary: List all of a brand's themes
+      responses:
+        '200':
+          description: A collection of brand themes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandTheme'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/homepage:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrandHomepage
+      tags:
+      - Studios
+      summary: Get homepage settings for the brand
+      responses:
+        '200':
+          description: Brand homepage settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandHomepage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateBrandHomepage
+      tags:
+      - Studios
+      summary: Update homepage settings for the brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandHomepage'
+      responses:
+        '200':
+          description: The updated brand homepage settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandHomepage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/watermark:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listBrandWatermarks
+      tags:
+      - Studios
+      summary: Lists all watermarks for the brand
+      responses:
+        '200':
+          description: A collection of watermarks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandWatermark'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/sales-history:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrandSalesHistory
+      tags:
+      - Studios
+      summary: Lists the sales history for the brand
+      responses:
+        '200':
+          description: Sales history entries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/gallery-activity-summary:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getGalleryActivitySummary
+      tags:
+      - Studios
+      summary: Lists the activity summary for each gallery
+      responses:
+        '200':
+          description: Gallery activity summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    BrandWatermark:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/BaseImage'
+    Links:
+      type: object
+      additionalProperties: true
+    Brand:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        studioId:
+          type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    BrandHomepage:
+      type: object
+      properties:
+        headline:
+          type: string
+        aboutText:
+          type: string
+        aboutImage:
+          $ref: '#/components/schemas/BaseImage'
+    BrandTheme:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        colors:
+          type: object
+          additionalProperties: true
+    BaseImage:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+    BrandInput:
+      type: object
+      properties:
+        name:
+          type: string
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+  responses:
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data

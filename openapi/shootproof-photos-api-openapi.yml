@@ -1,0 +1,361 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients Photos API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Photos
+  description: Photos uploaded to an event, upload policies, originals, and zip bundles.
+paths:
+  /brand/{brandId}/event/{eventId}/photo:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: listEventPhotos
+      tags:
+      - Photos
+      summary: Lists all event photos for the event
+      responses:
+        '200':
+          description: A collection of event photos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventPhoto
+      tags:
+      - Photos
+      summary: Creates a new photo within the event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPhotoInput'
+      responses:
+        '200':
+          description: The created photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateEventPhotosBatch
+      tags:
+      - Photos
+      summary: Updates a batch of event photos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch update result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteEventPhotosBatch
+      tags:
+      - Photos
+      summary: Deletes a batch of event photos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch delete result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/photo/upload-policy:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    post:
+      operationId: createPhotoUploadPolicy
+      tags:
+      - Photos
+      summary: Generates a photo upload policy for the event
+      description: Returns signed upload-policy fields a client uses to upload photo bytes directly to ShootProof's storage backend.
+      responses:
+        '200':
+          description: A signed upload policy.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/photo/{eventPhotoId}:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    - $ref: '#/components/parameters/EventPhotoId'
+    get:
+      operationId: getEventPhoto
+      tags:
+      - Photos
+      summary: Returns a single event photo by ID
+      responses:
+        '200':
+          description: The requested photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateEventPhotoPartial
+      tags:
+      - Photos
+      summary: Partially updates an event photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPhotoInput'
+      responses:
+        '200':
+          description: The updated photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: removeEventPhoto
+      tags:
+      - Photos
+      summary: Removes an event photo
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event/{eventId}/photo/{eventPhotoId}/original:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    - $ref: '#/components/parameters/EventPhotoId'
+    get:
+      operationId: getEventPhotoOriginal
+      tags:
+      - Photos
+      summary: Redirects to a temporary URL where the photo's original image can be retrieved
+      responses:
+        '302':
+          description: Redirect to a temporary signed URL for the original file.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event/{eventId}/album/{eventAlbumId}/zip-bundle:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    - $ref: '#/components/parameters/EventAlbumId'
+    post:
+      operationId: createAlbumZipBundle
+      tags:
+      - Photos
+      summary: Create a new zip bundle for an album's photos
+      responses:
+        '200':
+          description: Zip bundle creation result with a download link.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/zip-bundle:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/EventId'
+    post:
+      operationId: createEventZipBundle
+      tags:
+      - Photos
+      summary: Create a new zip bundle link for event photos
+      responses:
+        '200':
+          description: Zip bundle creation result with a download link.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    BatchCollection:
+      type: object
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    EventPhoto:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+        thumbnail:
+          $ref: '#/components/schemas/BaseImage'
+        links:
+          $ref: '#/components/schemas/Links'
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    EventPhotoInput:
+      type: object
+      properties:
+        fileName:
+          type: string
+        status:
+          type: string
+    Links:
+      type: object
+      additionalProperties: true
+    BaseImage:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+  parameters:
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      description: The ID of the event.
+      schema:
+        type: string
+    EventPhotoId:
+      name: eventPhotoId
+      in: path
+      required: true
+      description: The ID of the event photo.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data

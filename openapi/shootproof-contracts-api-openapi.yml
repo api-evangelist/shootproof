@@ -1,0 +1,333 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients Contracts API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Contracts
+  description: Client contracts, contract templates, and contract email delivery.
+paths:
+  /brand/{brandId}/contract:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContracts
+      tags:
+      - Contracts
+      summary: List a brand's contracts
+      responses:
+        '200':
+          description: A collection of contracts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContract
+      tags:
+      - Contracts
+      summary: Create a contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+      responses:
+        '200':
+          description: The created contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contract/template:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContractTemplates
+      tags:
+      - Contracts
+      summary: List a brand's contract templates
+      responses:
+        '200':
+          description: A collection of contract templates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContractTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContractTemplate
+      tags:
+      - Contracts
+      summary: Create a contract template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractTemplateInput'
+      responses:
+        '200':
+          description: The created contract template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contract/{contractId}:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/ContractId'
+    get:
+      operationId: getContract
+      tags:
+      - Contracts
+      summary: Retrieve a contract with activity history and signature details
+      responses:
+        '200':
+          description: The requested contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateContractPartial
+      tags:
+      - Contracts
+      summary: Partially update a contract, including status and contact changes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+      responses:
+        '200':
+          description: The updated contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteContract
+      tags:
+      - Contracts
+      summary: Remove a contract from the brand
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/contract/{contractId}/email:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/ContractId'
+    post:
+      operationId: sendContractEmail
+      tags:
+      - Contracts
+      summary: Send email notifications to contract contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Contract:
+      type: object
+      properties:
+        id:
+          type: string
+        brandId:
+          type: string
+        html:
+          type: string
+        status:
+          type: string
+          enum:
+          - draft
+          - sent
+          - signed
+          - void
+        expirationDate:
+          type: string
+          format: date
+        contactIds:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    ContractTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        html:
+          type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    ContractInput:
+      type: object
+      properties:
+        html:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - draft
+          - sent
+          - signed
+          - void
+        contactIds:
+          type: array
+          items:
+            type: string
+    Links:
+      type: object
+      additionalProperties: true
+    ContractTemplateInput:
+      type: object
+      required:
+      - name
+      - html
+      properties:
+        name:
+          type: string
+        html:
+          type: string
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ContractId:
+      name: contractId
+      in: path
+      required: true
+      description: The ID of the contract.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data

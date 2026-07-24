@@ -1,0 +1,339 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Clients
+  description: Contacts (clients) attached to a brand.
+paths:
+  /brand/{brandId}/contact:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContacts
+      tags:
+      - Clients
+      summary: List a brand's contacts
+      responses:
+        '200':
+          description: A collection of contacts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContact
+      tags:
+      - Clients
+      summary: Create a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: The created contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/tag:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContactTags
+      tags:
+      - Clients
+      summary: List tags that may be applied to contacts
+      responses:
+        '200':
+          description: A collection of contact tags.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/{contactId}:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/ContactId'
+    get:
+      operationId: getContact
+      tags:
+      - Clients
+      summary: Retrieve a single contact's full details
+      responses:
+        '200':
+          description: The requested contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateContact
+      tags:
+      - Clients
+      summary: Update a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: The updated contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteContact
+      tags:
+      - Clients
+      summary: Remove a contact
+      description: Returns 409 Conflict if the contact is linked to invoices or contracts.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /brand/{brandId}/contact/{contactId}/email:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/ContactId'
+    post:
+      operationId: sendContactEmail
+      tags:
+      - Clients
+      summary: Send an email message to a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/{contactId}/recent-activity:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/ContactId'
+    get:
+      operationId: getContactRecentActivity
+      tags:
+      - Clients
+      summary: Retrieve a chronological list of recent activity for a contact
+      responses:
+        '200':
+          description: A collection of recent activity entries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    Links:
+      type: object
+      additionalProperties: true
+    ContactInput:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The resource is in a state that does not allow the requested change.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data

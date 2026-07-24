@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients Service Description API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Service Description
+  description: Root hypermedia entry point for the API.
+paths:
+  /:
+    get:
+      operationId: getServiceDescription
+      tags:
+      - Service Description
+      summary: Get the Studio API service description
+      description: Hypermedia root resource; clients follow its links to discover available operations.
+      responses:
+        '200':
+          description: Service description with hypermedia links.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HypermediaResource'
+components:
+  schemas:
+    HypermediaResource:
+      type: object
+      description: HAL-style resource envelope; every response carries a `links` object of link relations.
+      properties:
+        links:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data

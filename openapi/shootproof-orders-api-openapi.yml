@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset) Clients Orders API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+- url: https://api.shootproof.com/studio
+  description: ShootProof Studio API (production)
+security:
+- shootProofAuth:
+  - studio
+tags:
+- name: Orders
+  description: Print/product orders, order items, lab shipments, and payments (beta).
+paths:
+  /brand/{brandId}/order:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listOrders
+      tags:
+      - Orders
+      summary: Returns a list of all orders for the current brand
+      responses:
+        '200':
+          description: A collection of orders.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrder
+      tags:
+      - Orders
+      summary: Creates a new order for the current brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '200':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: getOrder
+      tags:
+      - Orders
+      summary: Returns a single order by ID
+      responses:
+        '200':
+          description: The requested order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteOrder
+      tags:
+      - Orders
+      summary: Removes an order by changing its status to deleted
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/order/{orderId}/item:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: listOrderItems
+      tags:
+      - Orders
+      summary: Returns a list of all order items for the current order
+      responses:
+        '200':
+          description: A collection of order items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrderItem
+      tags:
+      - Orders
+      summary: Adds new order items for each photo ID provided in the request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemInput'
+      responses:
+        '200':
+          description: The created order item(s).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/email:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/OrderId'
+    post:
+      operationId: sendOrderEmail
+      tags:
+      - Orders
+      summary: Transmits an order receipt email with transaction details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/lab-shipment:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/OrderId'
+    post:
+      operationId: createLabShipment
+      tags:
+      - Orders
+      summary: Generates lab shipment records for order fulfillment
+      responses:
+        '200':
+          description: The created lab shipment record(s).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/payment:
+    parameters:
+    - $ref: '#/components/parameters/BrandId'
+    - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: listOrderPayments
+      tags:
+      - Orders
+      summary: Lists all client payment records associated with an order
+      responses:
+        '200':
+          description: A collection of payments.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    OrderInput:
+      type: object
+      required:
+      - eventId
+      properties:
+        eventId:
+          type: string
+        contactId:
+          type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        photoId:
+          type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    Links:
+      type: object
+      additionalProperties: true
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        contactId:
+          type: string
+        status:
+          type: string
+          enum:
+          - open
+          - completed
+          - deleted
+        total:
+          type: number
+          format: float
+        links:
+          $ref: '#/components/schemas/Links'
+    OrderItemInput:
+      type: object
+      required:
+      - photoIds
+      properties:
+        photoIds:
+          type: array
+          items:
+            type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+  parameters:
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      description: The ID of the order.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data
