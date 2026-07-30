@@ -14,7 +14,20 @@ description: ShootProof is a SaaS platform for professional photographers that
   API access is included free with a ShootProof account; a client ID is issued
   by ShootProof support on request. A separate legacy REST API also remains
   documented for older integrations.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/shootproof.png
 tags:
 - Photography
 - Client Galleries
@@ -27,127 +40,160 @@ created: '2026-07-04'
 modified: '2026-07-04'
 specificationVersion: '0.19'
 apis:
-- aid: shootproof:shootproof-studios-api
-  name: ShootProof Studios API
-  tags:
-  - Studios
-  - Brands
-  - Account
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/brands/
-  baseURL: https://api.shootproof.com/studio
-  properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/brands/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: Read and update a photographer's Studio and its Brands - list a
-    studio's brands, get and partially update a brand, manage brand themes and
-    homepage settings, list watermarks, and pull gallery-activity, lab-order,
-    and sales-history summaries for a brand.
-- aid: shootproof:shootproof-events-galleries-api
-  name: ShootProof Events & Galleries API
-  tags:
-  - Events
-  - Galleries
-  - Albums
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/events/
-  baseURL: https://api.shootproof.com/studio
-  properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/events/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: Create, list, update, and batch-manage Events (client galleries
-    and shoots) and the Albums nested inside them - event categories and
-    defaults, per-event/album digital download rules, cover photos, QR codes
-    for Volume events, and the client contact attached to an event.
-- aid: shootproof:shootproof-photos-api
-  name: ShootProof Photos API
-  tags:
-  - Photos
-  - Uploads
-  - Digital Downloads
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/events/
-  baseURL: https://api.shootproof.com/studio
-  properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/events/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: List, retrieve, create, update, and delete the photos inside an
-    event - generate a signed photo upload policy, redirect to a photo's
-    original file, add or remove photos from an album, and create zip-bundle
-    download links for an event or album.
 - aid: shootproof:shootproof-clients-api
   name: ShootProof Clients API
+  description: Contacts (clients) attached to a brand.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
   tags:
-  - Contacts
   - Clients
-  - CRM
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/contacts/
-  baseURL: https://api.shootproof.com/studio
   properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/contacts/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: Manage the contacts (clients) attached to a brand - create,
-    list, search, update, and delete contacts, look up referral tags and
-    relationships, send a contact an email, and read a contact's recent
-    activity timeline.
-- aid: shootproof:shootproof-orders-api
-  name: ShootProof Orders API
-  tags:
-  - Orders
-  - E-Commerce
-  - Lab Fulfillment
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/orders/
-  baseURL: https://api.shootproof.com/studio
-  properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/orders/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: Create and manage print/product orders placed against a brand
-    (beta, per ShootProof's own API tagging) - list and retrieve orders,
-    add/update/remove order items tied to specific photos, email order
-    receipts, generate lab shipment records, and list client payments recorded
-    against an order.
+  - type: OpenAPI
+    url: openapi/shootproof-clients-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
 - aid: shootproof:shootproof-contracts-api
   name: ShootProof Contracts API
+  description: Client contracts, contract templates, and contract email delivery.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
   tags:
   - Contracts
-  - E-Sign
-  - Templates
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.shootproof.com/reference/studio/contracts/
-  baseURL: https://api.shootproof.com/studio
   properties:
-  - url: https://developer.shootproof.com/guide/
-    type: Documentation
-  - url: https://developer.shootproof.com/reference/studio/contracts/
-    type: APIReference
-  - url: openapi/shootproof-openapi.yml
-    type: OpenAPI
-  description: Create and manage client contracts and reusable contract
-    templates - full CRUD on contracts and templates, updating contract status
-    and associated contacts, and emailing a contract to its contacts for
-    review and e-signature.
+  - type: OpenAPI
+    url: openapi/shootproof-contracts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
+- aid: shootproof:shootproof-events-galleries-api
+  name: ShootProof Events & Galleries API
+  description: Client events (galleries/shoots), albums, categories, digital rules, and QR codes.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
+  tags:
+  - Events & Galleries
+  properties:
+  - type: OpenAPI
+    url: openapi/shootproof-events-galleries-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
+- aid: shootproof:shootproof-orders-api
+  name: ShootProof Orders API
+  description: Print/product orders, order items, lab shipments, and payments (beta).
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/shootproof-orders-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
+- aid: shootproof:shootproof-photos-api
+  name: ShootProof Photos API
+  description: Photos uploaded to an event, upload policies, originals, and zip bundles.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
+  tags:
+  - Photos
+  properties:
+  - type: OpenAPI
+    url: openapi/shootproof-photos-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
+- aid: shootproof:shootproof-service-description-api
+  name: ShootProof Service Description API
+  description: Root hypermedia entry point for the API.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
+  tags:
+  - Service Description
+  properties:
+  - type: OpenAPI
+    url: openapi/shootproof-service-description-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
+- aid: shootproof:shootproof-studios-api
+  name: ShootProof Studios API
+  description: Brands, brand themes, homepage settings, watermarks, and summary reports.
+  humanURL: https://developer.shootproof.com/reference/studio/brands/
+  baseURL: https://api.shootproof.com/studio
+  tags:
+  - Studios
+  properties:
+  - type: OpenAPI
+    url: openapi/shootproof-studios-api-openapi.yml
+  - type: Documentation
+    url: https://developer.shootproof.com/guide/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/brands/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/events/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contacts/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/orders/
+  - type: APIReference
+    url: https://developer.shootproof.com/reference/studio/contracts/
 common:
 - type: AgenticAccess
   url: agentic-access/shootproof-agentic-access.yml
