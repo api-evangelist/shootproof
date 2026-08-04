@@ -1,0 +1,26 @@
+{
+  "provider": "shootproof",
+  "sources": [
+    "shootproof-clients-api-openapi.yml",
+    "shootproof-contracts-api-openapi.yml",
+    "shootproof-events-galleries-api-openapi.yml",
+    "shootproof-orders-api-openapi.yml",
+    "shootproof-photos-api-openapi.yml",
+    "shootproof-service-description-api-openapi.yml",
+    "shootproof-studios-api-openapi.yml"
+  ],
+  "outputs": [
+    "shootproof-clients-api-openapi.yml",
+    "shootproof-contracts-api-openapi.yml",
+    "shootproof-events-galleries-api-openapi.yml",
+    "shootproof-orders-api-openapi.yml",
+    "shootproof-photos-api-openapi.yml",
+    "shootproof-service-description-api-openapi.yml",
+    "shootproof-studios-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

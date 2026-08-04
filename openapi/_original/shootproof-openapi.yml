@@ -1,0 +1,1884 @@
+openapi: 3.0.3
+info:
+  title: ShootProof Studio API (Curated Subset)
+  description: >-
+    Curated subset of ShootProof's public Studio Panel API, covering the
+    Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders,
+    and Contracts resources. Endpoints, methods, and paths below are drawn
+    directly from ShootProof's live OpenAPI 3.0 document
+    (https://developer.shootproof.com/oas/studio.json), which as of the
+    review date defines 157 paths and 181 schemas across Brands, Contacts,
+    Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and
+    more. This file is a representative curated subset for cataloging
+    purposes, not a full mirror - fetch the live document for the complete,
+    authoritative spec. The API is RESTful and hypermedia-driven (HAL-style
+    `links` objects on every response) and secured with three-legged OAuth
+    2.0; not all resources are exposed identically across every scope.
+  version: '1.0'
+  contact:
+    name: ShootProof
+    url: https://developer.shootproof.com/
+    email: support@shootproof.com
+  termsOfService: https://www.shootproof.com/legal/terms-of-use
+servers:
+  - url: https://api.shootproof.com/studio
+    description: ShootProof Studio API (production)
+security:
+  - shootProofAuth:
+      - studio
+tags:
+  - name: Service Description
+    description: Root hypermedia entry point for the API.
+  - name: Studios
+    description: Brands, brand themes, homepage settings, watermarks, and summary reports.
+  - name: Events & Galleries
+    description: Client events (galleries/shoots), albums, categories, digital rules, and QR codes.
+  - name: Photos
+    description: Photos uploaded to an event, upload policies, originals, and zip bundles.
+  - name: Clients
+    description: Contacts (clients) attached to a brand.
+  - name: Orders
+    description: Print/product orders, order items, lab shipments, and payments (beta).
+  - name: Contracts
+    description: Client contracts, contract templates, and contract email delivery.
+paths:
+  /:
+    get:
+      operationId: getServiceDescription
+      tags:
+        - Service Description
+      summary: Get the Studio API service description
+      description: Hypermedia root resource; clients follow its links to discover available operations.
+      responses:
+        '200':
+          description: Service description with hypermedia links.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HypermediaResource'
+  /brand:
+    get:
+      operationId: listBrands
+      tags:
+        - Studios
+      summary: List all of a studio's brands
+      responses:
+        '200':
+          description: A collection of brands.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Brand'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrand
+      tags:
+        - Studios
+      summary: Get a brand
+      responses:
+        '200':
+          description: The requested brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateBrandPartial
+      tags:
+        - Studios
+      summary: Partially update a brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandInput'
+      responses:
+        '200':
+          description: The updated brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/brand-theme:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listBrandThemes
+      tags:
+        - Studios
+      summary: List all of a brand's themes
+      responses:
+        '200':
+          description: A collection of brand themes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandTheme'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/homepage:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrandHomepage
+      tags:
+        - Studios
+      summary: Get homepage settings for the brand
+      responses:
+        '200':
+          description: Brand homepage settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandHomepage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateBrandHomepage
+      tags:
+        - Studios
+      summary: Update homepage settings for the brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandHomepage'
+      responses:
+        '200':
+          description: The updated brand homepage settings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandHomepage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/watermark:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listBrandWatermarks
+      tags:
+        - Studios
+      summary: Lists all watermarks for the brand
+      responses:
+        '200':
+          description: A collection of watermarks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandWatermark'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/sales-history:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getBrandSalesHistory
+      tags:
+        - Studios
+      summary: Lists the sales history for the brand
+      responses:
+        '200':
+          description: Sales history entries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/gallery-activity-summary:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: getGalleryActivitySummary
+      tags:
+        - Studios
+      summary: Lists the activity summary for each gallery
+      responses:
+        '200':
+          description: Gallery activity summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listEvents
+      tags:
+        - Events & Galleries
+      summary: List a brand's events
+      responses:
+        '200':
+          description: A collection of events.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEvent
+      tags:
+        - Events & Galleries
+      summary: Create an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+      responses:
+        '200':
+          description: The created event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateEventsBatch
+      tags:
+        - Events & Galleries
+      summary: Update a batch of events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch update result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteEventsBatch
+      tags:
+        - Events & Galleries
+      summary: Delete a batch of events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch delete result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: getEvent
+      tags:
+        - Events & Galleries
+      summary: Get an event
+      responses:
+        '200':
+          description: The requested event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateEventPartial
+      tags:
+        - Events & Galleries
+      summary: Partially update an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventInput'
+      responses:
+        '200':
+          description: The updated event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteEvent
+      tags:
+        - Events & Galleries
+      summary: Delete an event
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event-category:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listEventCategories
+      tags:
+        - Events & Galleries
+      summary: List a brand's event categories
+      responses:
+        '200':
+          description: A collection of event categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventCategory'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventCategory
+      tags:
+        - Events & Galleries
+      summary: Create a new event category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCategoryInput'
+      responses:
+        '200':
+          description: The created event category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventCategory'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/album:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: listEventAlbums
+      tags:
+        - Events & Galleries
+      summary: List an event's albums
+      responses:
+        '200':
+          description: A collection of albums.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventAlbum'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventAlbum
+      tags:
+        - Events & Galleries
+      summary: Create a new album in an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventAlbumInput'
+      responses:
+        '200':
+          description: The created album.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAlbum'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/album/{eventAlbumId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+      - $ref: '#/components/parameters/EventAlbumId'
+    get:
+      operationId: getEventAlbum
+      tags:
+        - Events & Galleries
+      summary: Get an album for an event
+      responses:
+        '200':
+          description: The requested album.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAlbum'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateEventAlbumPartial
+      tags:
+        - Events & Galleries
+      summary: Partially update an album for an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventAlbumInput'
+      responses:
+        '200':
+          description: The updated album.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventAlbum'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteEventAlbum
+      tags:
+        - Events & Galleries
+      summary: Delete an album from an event
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event/{eventId}/digital-rule:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: listEventDigitalRules
+      tags:
+        - Events & Galleries
+      summary: Retrieves the digital rules associated with the event
+      responses:
+        '200':
+          description: A collection of digital rules.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DigitalRule'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventDigitalRule
+      tags:
+        - Events & Galleries
+      summary: Creates a new digital rule and associates it with an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DigitalRuleInput'
+      responses:
+        '200':
+          description: The created digital rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalRule'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/qr-code:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: listEventQrCodes
+      tags:
+        - Events & Galleries
+      summary: List an event's QR codes
+      responses:
+        '200':
+          description: A collection of QR codes.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventQrCode
+      tags:
+        - Events & Galleries
+      summary: Create a new QR Code for a Volume event
+      responses:
+        '200':
+          description: The created QR code.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/contact/{contactId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+      - $ref: '#/components/parameters/ContactId'
+    get:
+      operationId: getEventContact
+      tags:
+        - Events & Galleries
+      summary: Returns an event's contact by contact ID
+      responses:
+        '200':
+          description: The event contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: setEventContact
+      tags:
+        - Events & Galleries
+      summary: Sets the contact for the event and updates their permissions, if provided
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: The updated event contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: removeEventContact
+      tags:
+        - Events & Galleries
+      summary: Removes an event contact
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/photo:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    get:
+      operationId: listEventPhotos
+      tags:
+        - Photos
+      summary: Lists all event photos for the event
+      responses:
+        '200':
+          description: A collection of event photos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createEventPhoto
+      tags:
+        - Photos
+      summary: Creates a new photo within the event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPhotoInput'
+      responses:
+        '200':
+          description: The created photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateEventPhotosBatch
+      tags:
+        - Photos
+      summary: Updates a batch of event photos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch update result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteEventPhotosBatch
+      tags:
+        - Photos
+      summary: Deletes a batch of event photos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCollection'
+      responses:
+        '200':
+          description: Batch delete result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/photo/upload-policy:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    post:
+      operationId: createPhotoUploadPolicy
+      tags:
+        - Photos
+      summary: Generates a photo upload policy for the event
+      description: >-
+        Returns signed upload-policy fields a client uses to upload photo
+        bytes directly to ShootProof's storage backend.
+      responses:
+        '200':
+          description: A signed upload policy.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/photo/{eventPhotoId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+      - $ref: '#/components/parameters/EventPhotoId'
+    get:
+      operationId: getEventPhoto
+      tags:
+        - Photos
+      summary: Returns a single event photo by ID
+      responses:
+        '200':
+          description: The requested photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateEventPhotoPartial
+      tags:
+        - Photos
+      summary: Partially updates an event photo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventPhotoInput'
+      responses:
+        '200':
+          description: The updated photo.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPhoto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: removeEventPhoto
+      tags:
+        - Photos
+      summary: Removes an event photo
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event/{eventId}/photo/{eventPhotoId}/original:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+      - $ref: '#/components/parameters/EventPhotoId'
+    get:
+      operationId: getEventPhotoOriginal
+      tags:
+        - Photos
+      summary: Redirects to a temporary URL where the photo's original image can be retrieved
+      responses:
+        '302':
+          description: Redirect to a temporary signed URL for the original file.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/event/{eventId}/album/{eventAlbumId}/zip-bundle:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+      - $ref: '#/components/parameters/EventAlbumId'
+    post:
+      operationId: createAlbumZipBundle
+      tags:
+        - Photos
+      summary: Create a new zip bundle for an album's photos
+      responses:
+        '200':
+          description: Zip bundle creation result with a download link.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/event/{eventId}/zip-bundle:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/EventId'
+    post:
+      operationId: createEventZipBundle
+      tags:
+        - Photos
+      summary: Create a new zip bundle link for event photos
+      responses:
+        '200':
+          description: Zip bundle creation result with a download link.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContacts
+      tags:
+        - Clients
+      summary: List a brand's contacts
+      responses:
+        '200':
+          description: A collection of contacts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContact
+      tags:
+        - Clients
+      summary: Create a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: The created contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/tag:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContactTags
+      tags:
+        - Clients
+      summary: List tags that may be applied to contacts
+      responses:
+        '200':
+          description: A collection of contact tags.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/{contactId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/ContactId'
+    get:
+      operationId: getContact
+      tags:
+        - Clients
+      summary: Retrieve a single contact's full details
+      responses:
+        '200':
+          description: The requested contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateContact
+      tags:
+        - Clients
+      summary: Update a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInput'
+      responses:
+        '200':
+          description: The updated contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteContact
+      tags:
+        - Clients
+      summary: Remove a contact
+      description: Returns 409 Conflict if the contact is linked to invoices or contracts.
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /brand/{brandId}/contact/{contactId}/email:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/ContactId'
+    post:
+      operationId: sendContactEmail
+      tags:
+        - Clients
+      summary: Send an email message to a contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contact/{contactId}/recent-activity:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/ContactId'
+    get:
+      operationId: getContactRecentActivity
+      tags:
+        - Clients
+      summary: Retrieve a chronological list of recent activity for a contact
+      responses:
+        '200':
+          description: A collection of recent activity entries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listOrders
+      tags:
+        - Orders
+      summary: Returns a list of all orders for the current brand
+      responses:
+        '200':
+          description: A collection of orders.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrder
+      tags:
+        - Orders
+      summary: Creates a new order for the current brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '200':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: getOrder
+      tags:
+        - Orders
+      summary: Returns a single order by ID
+      responses:
+        '200':
+          description: The requested order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteOrder
+      tags:
+        - Orders
+      summary: Removes an order by changing its status to deleted
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/order/{orderId}/item:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: listOrderItems
+      tags:
+        - Orders
+      summary: Returns a list of all order items for the current order
+      responses:
+        '200':
+          description: A collection of order items.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrderItem
+      tags:
+        - Orders
+      summary: Adds new order items for each photo ID provided in the request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemInput'
+      responses:
+        '200':
+          description: The created order item(s).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/email:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/OrderId'
+    post:
+      operationId: sendOrderEmail
+      tags:
+        - Orders
+      summary: Transmits an order receipt email with transaction details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/lab-shipment:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/OrderId'
+    post:
+      operationId: createLabShipment
+      tags:
+        - Orders
+      summary: Generates lab shipment records for order fulfillment
+      responses:
+        '200':
+          description: The created lab shipment record(s).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/order/{orderId}/payment:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/OrderId'
+    get:
+      operationId: listOrderPayments
+      tags:
+        - Orders
+      summary: Lists all client payment records associated with an order
+      responses:
+        '200':
+          description: A collection of payments.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contract:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContracts
+      tags:
+        - Contracts
+      summary: List a brand's contracts
+      responses:
+        '200':
+          description: A collection of contracts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContract
+      tags:
+        - Contracts
+      summary: Create a contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+      responses:
+        '200':
+          description: The created contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contract/template:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+    get:
+      operationId: listContractTemplates
+      tags:
+        - Contracts
+      summary: List a brand's contract templates
+      responses:
+        '200':
+          description: A collection of contract templates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContractTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createContractTemplate
+      tags:
+        - Contracts
+      summary: Create a contract template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractTemplateInput'
+      responses:
+        '200':
+          description: The created contract template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /brand/{brandId}/contract/{contractId}:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/ContractId'
+    get:
+      operationId: getContract
+      tags:
+        - Contracts
+      summary: Retrieve a contract with activity history and signature details
+      responses:
+        '200':
+          description: The requested contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateContractPartial
+      tags:
+        - Contracts
+      summary: Partially update a contract, including status and contact changes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractInput'
+      responses:
+        '200':
+          description: The updated contract.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      operationId: deleteContract
+      tags:
+        - Contracts
+      summary: Remove a contract from the brand
+      responses:
+        '200':
+          description: Deletion confirmation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /brand/{brandId}/contract/{contractId}/email:
+    parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/ContractId'
+    post:
+      operationId: sendContractEmail
+      tags:
+        - Contracts
+      summary: Send email notifications to contract contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicEmailMessage'
+      responses:
+        '200':
+          description: Email send confirmation.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    shootProofAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.shootproof.com/oauth2/authorization/new
+          tokenUrl: https://auth.shootproof.com/oauth2/authorization/token
+          refreshUrl: https://auth.shootproof.com/oauth2/authorization/token
+          scopes:
+            studio: read and write access to your Studio Panel data
+            studio.brand.read-only: read access to your Studio Panel Brand data
+            studio.info.read-only: read access to your Studio Panel account data
+            studio.order.lab-shipment.read-write: read and write access to your Studio Panel Order shipment data
+            studio.order.read-write: read and write access to your Studio Panel Order data
+  parameters:
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      description: The ID of the event.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
+    EventPhotoId:
+      name: eventPhotoId
+      in: path
+      required: true
+      description: The ID of the event photo.
+      schema:
+        type: string
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      description: The ID of the order.
+      schema:
+        type: string
+    ContractId:
+      name: contractId
+      in: path
+      required: true
+      description: The ID of the contract.
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The resource is in a state that does not allow the requested change.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InsufficientStorage:
+      description: The studio's plan storage/active-photo allowance would be exceeded.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    HypermediaResource:
+      type: object
+      description: HAL-style resource envelope; every response carries a `links` object of link relations.
+      properties:
+        links:
+          type: object
+          additionalProperties: true
+    Links:
+      type: object
+      additionalProperties: true
+    Brand:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        studioId:
+          type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    BrandInput:
+      type: object
+      properties:
+        name:
+          type: string
+    BrandTheme:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        colors:
+          type: object
+          additionalProperties: true
+    BrandHomepage:
+      type: object
+      properties:
+        headline:
+          type: string
+        aboutText:
+          type: string
+        aboutImage:
+          $ref: '#/components/schemas/BaseImage'
+    BrandWatermark:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/BaseImage'
+    BaseImage:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+    EventCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    EventCategoryInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        eventDate:
+          type: string
+          format: date
+        categoryId:
+          type: string
+        status:
+          type: string
+          enum:
+            - active
+            - archived
+            - deleted
+        links:
+          $ref: '#/components/schemas/Links'
+    EventInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        eventDate:
+          type: string
+          format: date
+        categoryId:
+          type: string
+        status:
+          type: string
+          enum:
+            - active
+            - archived
+            - deleted
+    EventAlbum:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        name:
+          type: string
+        parentAlbumId:
+          type: string
+          nullable: true
+    EventAlbumInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        parentAlbumId:
+          type: string
+          nullable: true
+    DigitalRule:
+      type: object
+      properties:
+        id:
+          type: string
+        allowDownload:
+          type: boolean
+        watermarked:
+          type: boolean
+        maxDownloads:
+          type: integer
+    DigitalRuleInput:
+      type: object
+      properties:
+        allowDownload:
+          type: boolean
+        watermarked:
+          type: boolean
+        maxDownloads:
+          type: integer
+    EventPhoto:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+        thumbnail:
+          $ref: '#/components/schemas/BaseImage'
+        links:
+          $ref: '#/components/schemas/Links'
+    EventPhotoInput:
+      type: object
+      properties:
+        fileName:
+          type: string
+        status:
+          type: string
+    BatchCollection:
+      type: object
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    ContactInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    BasicEmailMessage:
+      type: object
+      required:
+        - subject
+        - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        contactId:
+          type: string
+        status:
+          type: string
+          enum:
+            - open
+            - completed
+            - deleted
+        total:
+          type: number
+          format: float
+        links:
+          $ref: '#/components/schemas/Links'
+    OrderInput:
+      type: object
+      required:
+        - eventId
+      properties:
+        eventId:
+          type: string
+        contactId:
+          type: string
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        photoId:
+          type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
+    OrderItemInput:
+      type: object
+      required:
+        - photoIds
+      properties:
+        photoIds:
+          type: array
+          items:
+            type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
+    Contract:
+      type: object
+      properties:
+        id:
+          type: string
+        brandId:
+          type: string
+        html:
+          type: string
+        status:
+          type: string
+          enum:
+            - draft
+            - sent
+            - signed
+            - void
+        expirationDate:
+          type: string
+          format: date
+        contactIds:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    ContractInput:
+      type: object
+      properties:
+        html:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+            - draft
+            - sent
+            - signed
+            - void
+        contactIds:
+          type: array
+          items:
+            type: string
+    ContractTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        html:
+          type: string
+    ContractTemplateInput:
+      type: object
+      required:
+        - name
+        - html
+      properties:
+        name:
+          type: string
+        html:
+          type: string
