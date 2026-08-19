@@ -1,0 +1,201 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API (Curated Subset) Clients Studios API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.shootproof.com/oauth2/authorization/new",
+      "accessTokenUrl": "https://auth.shootproof.com/oauth2/authorization/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Studios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all of a studio's brands",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand"
+          },
+          "docs": "List all of a studio's brands"
+        },
+        {
+          "info": {
+            "name": "Get a brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "Get a brand"
+        },
+        {
+          "info": {
+            "name": "Partially update a brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a brand"
+        },
+        {
+          "info": {
+            "name": "List all of a brand's themes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/brand-theme",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List all of a brand's themes"
+        },
+        {
+          "info": {
+            "name": "Get homepage settings for the brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/homepage",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "Get homepage settings for the brand"
+        },
+        {
+          "info": {
+            "name": "Update homepage settings for the brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/homepage",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update homepage settings for the brand"
+        },
+        {
+          "info": {
+            "name": "Lists all watermarks for the brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/watermark",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "Lists all watermarks for the brand"
+        },
+        {
+          "info": {
+            "name": "Lists the sales history for the brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/sales-history",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "Lists the sales history for the brand"
+        },
+        {
+          "info": {
+            "name": "Lists the activity summary for each gallery",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/gallery-activity-summary",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "Lists the activity summary for each gallery"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

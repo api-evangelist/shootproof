@@ -1,0 +1,351 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API (Curated Subset) Clients Photos API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.shootproof.com/oauth2/authorization/new",
+      "accessTokenUrl": "https://auth.shootproof.com/oauth2/authorization/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Photos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all event photos for the event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Lists all event photos for the event"
+        },
+        {
+          "info": {
+            "name": "Creates a new photo within the event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new photo within the event"
+        },
+        {
+          "info": {
+            "name": "Updates a batch of event photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a batch of event photos"
+        },
+        {
+          "info": {
+            "name": "Deletes a batch of event photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a batch of event photos"
+        },
+        {
+          "info": {
+            "name": "Generates a photo upload policy for the event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/upload-policy",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Returns signed upload-policy fields a client uses to upload photo bytes directly to ShootProof's storage backend."
+        },
+        {
+          "info": {
+            "name": "Returns a single event photo by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/:eventPhotoId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventPhotoId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event photo."
+              }
+            ]
+          },
+          "docs": "Returns a single event photo by ID"
+        },
+        {
+          "info": {
+            "name": "Partially updates an event photo",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/:eventPhotoId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventPhotoId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event photo."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially updates an event photo"
+        },
+        {
+          "info": {
+            "name": "Removes an event photo",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/:eventPhotoId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventPhotoId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event photo."
+              }
+            ]
+          },
+          "docs": "Removes an event photo"
+        },
+        {
+          "info": {
+            "name": "Redirects to a temporary URL where the photo's original image can be retrieved",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/photo/:eventPhotoId/original",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventPhotoId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event photo."
+              }
+            ]
+          },
+          "docs": "Redirects to a temporary URL where the photo's original image can be retrieved"
+        },
+        {
+          "info": {
+            "name": "Create a new zip bundle for an album's photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album/:eventAlbumId/zip-bundle",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventAlbumId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event album."
+              }
+            ]
+          },
+          "docs": "Create a new zip bundle for an album's photos"
+        },
+        {
+          "info": {
+            "name": "Create a new zip bundle link for event photos",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/zip-bundle",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Create a new zip bundle link for event photos"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

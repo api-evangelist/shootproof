@@ -1,0 +1,222 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API (Curated Subset) Clients Contracts API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.shootproof.com/oauth2/authorization/new",
+      "accessTokenUrl": "https://auth.shootproof.com/oauth2/authorization/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Contracts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a brand's contracts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List a brand's contracts"
+        },
+        {
+          "info": {
+            "name": "Create a contract",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a contract"
+        },
+        {
+          "info": {
+            "name": "List a brand's contract templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/template",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List a brand's contract templates"
+        },
+        {
+          "info": {
+            "name": "Create a contract template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/template",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a contract template"
+        },
+        {
+          "info": {
+            "name": "Retrieve a contract with activity history and signature details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/:contractId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contract."
+              }
+            ]
+          },
+          "docs": "Retrieve a contract with activity history and signature details"
+        },
+        {
+          "info": {
+            "name": "Partially update a contract, including status and contact changes",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/:contractId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contract."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a contract, including status and contact changes"
+        },
+        {
+          "info": {
+            "name": "Remove a contract from the brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/:contractId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contract."
+              }
+            ]
+          },
+          "docs": "Remove a contract from the brand"
+        },
+        {
+          "info": {
+            "name": "Send email notifications to contract contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contract/:contractId/email",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contractId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contract."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send email notifications to contract contacts"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

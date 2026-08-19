@@ -1,0 +1,135 @@
+{
+  "item": [
+    {
+      "id": "aa23808a-3567-4732-abe6-db6513ee56b0",
+      "name": "Service Description",
+      "description": {
+        "content": "Root hypermedia entry point for the API.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f0b7c02a-a2c6-43ee-bae4-4134f1178276",
+          "name": "Get the Studio API service description",
+          "request": {
+            "name": "Get the Studio API service description",
+            "description": {
+              "content": "Hypermedia root resource; clients follow its links to discover available operations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "208d0539-c92e-402f-81e5-de1dde0c7292",
+              "name": "Service description with hypermedia links.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"links\": {\n    \"key_0\": 8722\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shootproof.com/studio",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "studio studio.brand.read-only studio.info.read-only studio.order.lab-shipment.read-write studio.order.read-write"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://auth.shootproof.com/oauth2/authorization/token"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://auth.shootproof.com/oauth2/authorization/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://auth.shootproof.com/oauth2/authorization/new"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "54a2947b-7089-4cc8-9082-2207026b16ab",
+    "name": "ShootProof Studio API (Curated Subset) Clients Service Description API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.\n\nContact Support:\n Name: ShootProof\n Email: support@shootproof.com",
+      "type": "text/plain"
+    }
+  }
+}

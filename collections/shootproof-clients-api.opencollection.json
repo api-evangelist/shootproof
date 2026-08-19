@@ -1,0 +1,224 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API (Curated Subset) Clients API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.shootproof.com/oauth2/authorization/new",
+      "accessTokenUrl": "https://auth.shootproof.com/oauth2/authorization/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a brand's contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List a brand's contacts"
+        },
+        {
+          "info": {
+            "name": "Create a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a contact"
+        },
+        {
+          "info": {
+            "name": "List tags that may be applied to contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/tag",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List tags that may be applied to contacts"
+        },
+        {
+          "info": {
+            "name": "Retrieve a single contact's full details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ]
+          },
+          "docs": "Retrieve a single contact's full details"
+        },
+        {
+          "info": {
+            "name": "Update a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a contact"
+        },
+        {
+          "info": {
+            "name": "Remove a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ]
+          },
+          "docs": "Returns 409 Conflict if the contact is linked to invoices or contracts."
+        },
+        {
+          "info": {
+            "name": "Send an email message to a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/:contactId/email",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send an email message to a contact"
+        },
+        {
+          "info": {
+            "name": "Retrieve a chronological list of recent activity for a contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/contact/:contactId/recent-activity",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ]
+          },
+          "docs": "Retrieve a chronological list of recent activity for a contact"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

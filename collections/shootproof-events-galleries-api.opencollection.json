@@ -1,0 +1,591 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "ShootProof Studio API (Curated Subset) Clients Events & Galleries API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://auth.shootproof.com/oauth2/authorization/new",
+      "accessTokenUrl": "https://auth.shootproof.com/oauth2/authorization/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events & Galleries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List a brand's events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List a brand's events"
+        },
+        {
+          "info": {
+            "name": "Create an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an event"
+        },
+        {
+          "info": {
+            "name": "Update a batch of events",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a batch of events"
+        },
+        {
+          "info": {
+            "name": "Delete a batch of events",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete a batch of events"
+        },
+        {
+          "info": {
+            "name": "Get an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Get an event"
+        },
+        {
+          "info": {
+            "name": "Partially update an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update an event"
+        },
+        {
+          "info": {
+            "name": "Delete an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Delete an event"
+        },
+        {
+          "info": {
+            "name": "List a brand's event categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event-category",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ]
+          },
+          "docs": "List a brand's event categories"
+        },
+        {
+          "info": {
+            "name": "Create a new event category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event-category",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new event category"
+        },
+        {
+          "info": {
+            "name": "List an event's albums",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "List an event's albums"
+        },
+        {
+          "info": {
+            "name": "Create a new album in an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new album in an event"
+        },
+        {
+          "info": {
+            "name": "Get an album for an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album/:eventAlbumId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventAlbumId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event album."
+              }
+            ]
+          },
+          "docs": "Get an album for an event"
+        },
+        {
+          "info": {
+            "name": "Partially update an album for an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album/:eventAlbumId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventAlbumId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event album."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update an album for an event"
+        },
+        {
+          "info": {
+            "name": "Delete an album from an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/album/:eventAlbumId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "eventAlbumId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event album."
+              }
+            ]
+          },
+          "docs": "Delete an album from an event"
+        },
+        {
+          "info": {
+            "name": "Retrieves the digital rules associated with the event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/digital-rule",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Retrieves the digital rules associated with the event"
+        },
+        {
+          "info": {
+            "name": "Creates a new digital rule and associates it with an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/digital-rule",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new digital rule and associates it with an event"
+        },
+        {
+          "info": {
+            "name": "List an event's QR codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/qr-code",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "List an event's QR codes"
+        },
+        {
+          "info": {
+            "name": "Create a new QR Code for a Volume event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/qr-code",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              }
+            ]
+          },
+          "docs": "Create a new QR Code for a Volume event"
+        },
+        {
+          "info": {
+            "name": "Returns an event's contact by contact ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ]
+          },
+          "docs": "Returns an event's contact by contact ID"
+        },
+        {
+          "info": {
+            "name": "Sets the contact for the event and updates their permissions, if provided",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the contact for the event and updates their permissions, if provided"
+        },
+        {
+          "info": {
+            "name": "Removes an event contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shootproof.com/studio/brand/:brandId/event/:eventId/contact/:contactId",
+            "params": [
+              {
+                "name": "brandId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the brand."
+              },
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the event."
+              },
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the contact."
+              }
+            ]
+          },
+          "docs": "Removes an event contact"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
