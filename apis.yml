@@ -35,6 +35,14 @@ tags:
 - Digital Downloads
 - Photo Studio Management
 - E-Commerce
+- Software-as-a-Service
+tags_raw:
+- Photography
+- Client Galleries
+- Proofing
+- Digital Downloads
+- Photo Studio Management
+- E-Commerce
 - SaaS
 created: '2026-07-04'
 modified: '2026-07-04'
@@ -112,6 +120,8 @@ apis:
   humanURL: https://developer.shootproof.com/reference/studio/brands/
   baseURL: https://api.shootproof.com/studio
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
