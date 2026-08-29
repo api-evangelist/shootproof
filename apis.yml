@@ -217,6 +217,9 @@ apis:
   - type: APIReference
     url: https://developer.shootproof.com/reference/studio/contracts/
 common:
+- type: CapabilityMap
+  url: capabilities/shootproof-capability-edges.yml
+  name: ShootProof Business Capability Map
 - type: AgenticAccess
   url: agentic-access/shootproof-agentic-access.yml
 - type: DomainSecurity
