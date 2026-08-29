@@ -14,6 +14,18 @@ description: ShootProof is a SaaS platform for professional photographers that
   API access is included free with a ShootProof account; a client ID is issued
   by ShootProof support on request. A separate legacy REST API also remains
   documented for older integrations.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
