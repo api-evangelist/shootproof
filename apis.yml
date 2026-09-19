@@ -200,6 +200,8 @@ apis:
   humanURL: https://developer.shootproof.com/reference/studio/brands/
   baseURL: https://api.shootproof.com/studio
   tags:
+  - Studio
+  tags_raw:
   - Studios
   properties:
   - type: OpenAPI
