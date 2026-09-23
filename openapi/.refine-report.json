@@ -1,13 +1,7 @@
 {
   "provider": "shootproof",
   "sources": [
-    "shootproof-clients-api-openapi.yml",
-    "shootproof-contracts-api-openapi.yml",
-    "shootproof-events-galleries-api-openapi.yml",
-    "shootproof-orders-api-openapi.yml",
-    "shootproof-photos-api-openapi.yml",
-    "shootproof-service-description-api-openapi.yml",
-    "shootproof-studios-api-openapi.yml"
+    "_original/shootproof-openapi.yml"
   ],
   "outputs": [
     "shootproof-clients-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "shootproof-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "shootproof-clients-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-contracts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-events-galleries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-photos-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-service-description-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "shootproof-studios-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

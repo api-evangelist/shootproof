@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: ShootProof Studio API (Curated Subset) Clients Contracts API
-  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  title: ShootProof Studio API (Curated Subset) Contracts API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources.
   version: '1.0'
   contact:
     name: ShootProof
@@ -185,6 +185,33 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Links:
+      type: object
+      additionalProperties: true
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    ContractTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        html:
+          type: string
     Contract:
       type: object
       properties:
@@ -210,37 +237,16 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-    ContractTemplate:
+    ContractTemplateInput:
       type: object
+      required:
+      - name
+      - html
       properties:
-        id:
-          type: string
         name:
           type: string
         html:
           type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    BasicEmailMessage:
-      type: object
-      required:
-      - subject
-      - body
-      properties:
-        subject:
-          type: string
-        body:
-          type: string
-        recipients:
-          type: array
-          items:
-            type: string
-            format: email
     ContractInput:
       type: object
       properties:
@@ -260,19 +266,13 @@ components:
           type: array
           items:
             type: string
-    Links:
+    DeleteResponse:
       type: object
-      additionalProperties: true
-    ContractTemplateInput:
-      type: object
-      required:
-      - name
-      - html
       properties:
-        name:
+        id:
           type: string
-        html:
-          type: string
+        deleted:
+          type: boolean
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.

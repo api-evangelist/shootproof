@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: ShootProof Studio API (Curated Subset) Clients API
-  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources.
   version: '1.0'
   contact:
     name: ShootProof
@@ -183,28 +183,9 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Address:
+    Links:
       type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
+      additionalProperties: true
     BasicEmailMessage:
       type: object
       required:
@@ -220,9 +201,37 @@ components:
           items:
             type: string
             format: email
-    Links:
+    Error:
       type: object
-      additionalProperties: true
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
     ContactInput:
       type: object
       required:
@@ -245,6 +254,13 @@ components:
           type: array
           items:
             type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
     Contact:
       type: object
       properties:
@@ -267,47 +283,6 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Validation failure (most common error status code).
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Conflict:
-      description: The resource is in a state that does not allow the requested change.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     ContactId:
       name: contactId
@@ -323,6 +298,31 @@ components:
       description: The ID of the brand.
       schema:
         type: string
+  responses:
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The resource is in a state that does not allow the requested change.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     shootProofAuth:
       type: oauth2

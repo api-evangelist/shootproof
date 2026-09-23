@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: ShootProof Studio API (Curated Subset) Clients Events & Galleries API
-  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  title: ShootProof Studio API (Curated Subset) Events & Galleries…
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources.
   version: '1.0'
   contact:
     name: ShootProof
@@ -437,13 +437,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
     EventInput:
       type: object
       required:
@@ -462,13 +455,6 @@ components:
           - active
           - archived
           - deleted
-    EventCategory:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
     EventCategoryInput:
       type: object
       required:
@@ -476,22 +462,46 @@ components:
       properties:
         name:
           type: string
-    Error:
+    DeleteResponse:
       type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
       properties:
-        type:
+        id:
           type: string
-        title:
+        deleted:
+          type: boolean
+    EventAlbumInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
           type: string
-        status:
-          type: integer
-        detail:
+        parentAlbumId:
+          type:
+          - string
+          - 'null'
+    Contact:
+      type: object
+      properties:
+        id:
           type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
     EventAlbum:
       type: object
       properties:
@@ -502,27 +512,12 @@ components:
         name:
           type: string
         parentAlbumId:
-          type: string
-          nullable: true
-    EventAlbumInput:
+          type:
+          - string
+          - 'null'
+    Links:
       type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        parentAlbumId:
-          type: string
-          nullable: true
-    BatchCollection:
-      type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
+      additionalProperties: true
     Address:
       type: object
       properties:
@@ -549,6 +544,31 @@ components:
           type: boolean
         maxDownloads:
           type: integer
+    DigitalRuleInput:
+      type: object
+      properties:
+        allowDownload:
+          type: boolean
+        watermarked:
+          type: boolean
+        maxDownloads:
+          type: integer
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
     Event:
       type: object
       properties:
@@ -569,40 +589,51 @@ components:
           - deleted
         links:
           $ref: '#/components/schemas/Links'
-    Links:
+    BatchCollection:
       type: object
-      additionalProperties: true
-    Contact:
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    EventCategory:
       type: object
       properties:
         id:
           type: string
-        firstName:
+        name:
           type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        tags:
-          type: array
-          items:
-            type: string
-        links:
-          $ref: '#/components/schemas/Links'
-    DigitalRuleInput:
-      type: object
-      properties:
-        allowDownload:
-          type: boolean
-        watermarked:
-          type: boolean
-        maxDownloads:
-          type: integer
+  parameters:
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      description: The ID of the event.
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Missing, invalid, or expired OAuth 2.0 Bearer token.
@@ -622,35 +653,6 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    ContactId:
-      name: contactId
-      in: path
-      required: true
-      description: The ID of the contact.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
-    EventId:
-      name: eventId
-      in: path
-      required: true
-      description: The ID of the event.
-      schema:
-        type: string
-    EventAlbumId:
-      name: eventAlbumId
-      in: path
-      required: true
-      description: The ID of the event album.
-      schema:
-        type: string
   securitySchemes:
     shootProofAuth:
       type: oauth2

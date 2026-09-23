@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: ShootProof Studio API (Curated Subset) Clients Photos API
-  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources. Endpoints, methods, and paths below are drawn directly from ShootProof's live OpenAPI 3.0 document (https://developer.shootproof.com/oas/studio.json), which as of the review date defines 157 paths and 181 schemas across Brands, Contacts, Contracts, Email, Events, Invoices, Music, Orders, Price Sheets, and more. This file is a representative curated subset for cataloging purposes, not a full mirror - fetch the live document for the complete, authoritative spec. The API is RESTful and hypermedia-driven (HAL-style `links` objects on every response) and secured with three-legged OAuth 2.0; not all resources are exposed identically across every scope.
+  title: ShootProof Studio API (Curated Subset) Photos API
+  description: Curated subset of ShootProof's public Studio Panel API, covering the Studios/Brands, Events & Galleries, Photos, Clients (Contacts), Orders, and Contracts resources.
   version: '1.0'
   contact:
     name: ShootProof
@@ -236,37 +236,9 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BatchCollection:
+    Links:
       type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    EventPhoto:
-      type: object
-      properties:
-        id:
-          type: string
-        eventId:
-          type: string
-        fileName:
-          type: string
-        status:
-          type: string
-        thumbnail:
-          $ref: '#/components/schemas/BaseImage'
-        links:
-          $ref: '#/components/schemas/Links'
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
+      additionalProperties: true
     EventPhotoInput:
       type: object
       properties:
@@ -274,9 +246,6 @@ components:
           type: string
         status:
           type: string
-    Links:
-      type: object
-      additionalProperties: true
     BaseImage:
       type: object
       properties:
@@ -287,6 +256,22 @@ components:
           type: integer
         height:
           type: integer
+    BatchCollection:
+      type: object
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -303,7 +288,42 @@ components:
           type: object
           description: ShootProof extension carrying field-level validation errors.
           additionalProperties: true
+    EventPhoto:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        fileName:
+          type: string
+        status:
+          type: string
+        thumbnail:
+          $ref: '#/components/schemas/BaseImage'
+        links:
+          $ref: '#/components/schemas/Links'
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
     EventId:
       name: eventId
       in: path
@@ -318,13 +338,6 @@ components:
       description: The ID of the event photo.
       schema:
         type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
     EventAlbumId:
       name: eventAlbumId
       in: path
@@ -332,19 +345,6 @@ components:
       description: The ID of the event album.
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     shootProofAuth:
       type: oauth2
