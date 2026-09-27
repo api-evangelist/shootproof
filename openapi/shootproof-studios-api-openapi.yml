@@ -198,9 +198,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Links:
-      type: object
-      additionalProperties: true
     BrandInput:
       type: object
       properties:
@@ -235,26 +232,6 @@ components:
           type: integer
         height:
           type: integer
-    BrandHomepage:
-      type: object
-      properties:
-        headline:
-          type: string
-        aboutText:
-          type: string
-        aboutImage:
-          $ref: '#/components/schemas/BaseImage'
-    Brand:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        studioId:
-          type: string
-        links:
-          $ref: '#/components/schemas/Links'
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -271,9 +248,32 @@ components:
           type: object
           description: ShootProof extension carrying field-level validation errors.
           additionalProperties: true
+    Links:
+      type: object
+      additionalProperties: true
+    Brand:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        studioId:
+          type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    BrandHomepage:
+      type: object
+      properties:
+        headline:
+          type: string
+        aboutText:
+          type: string
+        aboutImage:
+          $ref: '#/components/schemas/BaseImage'
   responses:
-    BadRequest:
-      description: Validation failure (most common error status code).
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:
@@ -284,8 +284,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    BadRequest:
+      description: Validation failure (most common error status code).
       content:
         application/problem+json:
           schema:

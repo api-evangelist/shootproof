@@ -182,41 +182,29 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  parameters:
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
   schemas:
-    Links:
+    DeleteResponse:
       type: object
-      additionalProperties: true
-    BasicEmailMessage:
-      type: object
-      required:
-      - subject
-      - body
       properties:
-        subject:
+        id:
           type: string
-        body:
-          type: string
-        recipients:
-          type: array
-          items:
-            type: string
-            format: email
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
+        deleted:
+          type: boolean
     Address:
       type: object
       properties:
@@ -232,6 +220,21 @@ components:
           type: string
         country:
           type: string
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
     ContactInput:
       type: object
       required:
@@ -254,13 +257,22 @@ components:
           type: array
           items:
             type: string
-    DeleteResponse:
+    Error:
       type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
       properties:
-        id:
+        type:
           type: string
-        deleted:
-          type: boolean
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
     Contact:
       type: object
       properties:
@@ -283,24 +295,12 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-  parameters:
-    ContactId:
-      name: contactId
-      in: path
-      required: true
-      description: The ID of the contact.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
+    Links:
+      type: object
+      additionalProperties: true
   responses:
-    BadRequest:
-      description: Validation failure (most common error status code).
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:
@@ -311,14 +311,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+    BadRequest:
+      description: Validation failure (most common error status code).
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
       content:
         application/problem+json:
           schema:

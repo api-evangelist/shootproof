@@ -236,16 +236,37 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Links:
-      type: object
-      additionalProperties: true
-    EventPhotoInput:
+    DeleteResponse:
       type: object
       properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    BatchCollection:
+      type: object
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    EventPhoto:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
         fileName:
           type: string
         status:
           type: string
+        thumbnail:
+          $ref: '#/components/schemas/BaseImage'
+        links:
+          $ref: '#/components/schemas/Links'
     BaseImage:
       type: object
       properties:
@@ -256,22 +277,6 @@ components:
           type: integer
         height:
           type: integer
-    BatchCollection:
-      type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -288,40 +293,22 @@ components:
           type: object
           description: ShootProof extension carrying field-level validation errors.
           additionalProperties: true
-    EventPhoto:
+    Links:
+      type: object
+      additionalProperties: true
+    EventPhotoInput:
       type: object
       properties:
-        id:
-          type: string
-        eventId:
-          type: string
         fileName:
           type: string
         status:
           type: string
-        thumbnail:
-          $ref: '#/components/schemas/BaseImage'
-        links:
-          $ref: '#/components/schemas/Links'
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
-    BrandId:
-      name: brandId
+    EventAlbumId:
+      name: eventAlbumId
       in: path
       required: true
-      description: The ID of the brand.
+      description: The ID of the event album.
       schema:
         type: string
     EventId:
@@ -331,6 +318,13 @@ components:
       description: The ID of the event.
       schema:
         type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
     EventPhotoId:
       name: eventPhotoId
       in: path
@@ -338,13 +332,19 @@ components:
       description: The ID of the event photo.
       schema:
         type: string
-    EventAlbumId:
-      name: eventAlbumId
-      in: path
-      required: true
-      description: The ID of the event album.
-      schema:
-        type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     shootProofAuth:
       type: oauth2

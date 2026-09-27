@@ -204,9 +204,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Links:
+    DeleteResponse:
       type: object
-      additionalProperties: true
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
     BasicEmailMessage:
       type: object
       required:
@@ -222,6 +226,19 @@ components:
           items:
             type: string
             format: email
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        photoId:
+          type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
     Order:
       type: object
       properties:
@@ -242,35 +259,6 @@ components:
           format: float
         links:
           $ref: '#/components/schemas/Links'
-    OrderInput:
-      type: object
-      required:
-      - eventId
-      properties:
-        eventId:
-          type: string
-        contactId:
-          type: string
-    OrderItemInput:
-      type: object
-      required:
-      - photoIds
-      properties:
-        photoIds:
-          type: array
-          items:
-            type: string
-        priceSheetItemId:
-          type: string
-        quantity:
-          type: integer
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -287,19 +275,44 @@ components:
           type: object
           description: ShootProof extension carrying field-level validation errors.
           additionalProperties: true
-    OrderItem:
+    OrderInput:
       type: object
+      required:
+      - eventId
       properties:
-        id:
+        eventId:
           type: string
-        orderId:
+        contactId:
           type: string
-        photoId:
-          type: string
+    Links:
+      type: object
+      additionalProperties: true
+    OrderItemInput:
+      type: object
+      required:
+      - photoIds
+      properties:
+        photoIds:
+          type: array
+          items:
+            type: string
         priceSheetItemId:
           type: string
         quantity:
           type: integer
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     OrderId:
       name: orderId
@@ -315,19 +328,6 @@ components:
       description: The ID of the brand.
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     shootProofAuth:
       type: oauth2

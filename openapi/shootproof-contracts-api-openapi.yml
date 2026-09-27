@@ -185,9 +185,32 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Links:
+    DeleteResponse:
       type: object
-      additionalProperties: true
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    ContractInput:
+      type: object
+      properties:
+        html:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - draft
+          - sent
+          - signed
+          - void
+        contactIds:
+          type: array
+          items:
+            type: string
     BasicEmailMessage:
       type: object
       required:
@@ -203,11 +226,12 @@ components:
           items:
             type: string
             format: email
-    ContractTemplate:
+    ContractTemplateInput:
       type: object
+      required:
+      - name
+      - html
       properties:
-        id:
-          type: string
         name:
           type: string
         html:
@@ -237,42 +261,15 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-    ContractTemplateInput:
-      type: object
-      required:
-      - name
-      - html
-      properties:
-        name:
-          type: string
-        html:
-          type: string
-    ContractInput:
-      type: object
-      properties:
-        html:
-          type: string
-        expirationDate:
-          type: string
-          format: date
-        status:
-          type: string
-          enum:
-          - draft
-          - sent
-          - signed
-          - void
-        contactIds:
-          type: array
-          items:
-            type: string
-    DeleteResponse:
+    ContractTemplate:
       type: object
       properties:
         id:
           type: string
-        deleted:
-          type: boolean
+        name:
+          type: string
+        html:
+          type: string
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -289,15 +286,18 @@ components:
           type: object
           description: ShootProof extension carrying field-level validation errors.
           additionalProperties: true
+    Links:
+      type: object
+      additionalProperties: true
   responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
       content:
         application/problem+json:
           schema:

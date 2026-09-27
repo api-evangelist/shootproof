@@ -436,7 +436,116 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  parameters:
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      description: The ID of the event.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
   schemas:
+    EventAlbumInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        parentAlbumId:
+          type:
+          - string
+          - 'null'
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    EventAlbum:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        name:
+          type: string
+        parentAlbumId:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+        links:
+          $ref: '#/components/schemas/Links'
+    Links:
+      type: object
+      additionalProperties: true
     EventInput:
       type: object
       required:
@@ -462,88 +571,6 @@ components:
       properties:
         name:
           type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    EventAlbumInput:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        parentAlbumId:
-          type:
-          - string
-          - 'null'
-    Contact:
-      type: object
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        tags:
-          type: array
-          items:
-            type: string
-        links:
-          $ref: '#/components/schemas/Links'
-    EventAlbum:
-      type: object
-      properties:
-        id:
-          type: string
-        eventId:
-          type: string
-        name:
-          type: string
-        parentAlbumId:
-          type:
-          - string
-          - 'null'
-    Links:
-      type: object
-      additionalProperties: true
-    Address:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-    DigitalRule:
-      type: object
-      properties:
-        id:
-          type: string
-        allowDownload:
-          type: boolean
-        watermarked:
-          type: boolean
-        maxDownloads:
-          type: integer
     DigitalRuleInput:
       type: object
       properties:
@@ -553,22 +580,15 @@ components:
           type: boolean
         maxDownloads:
           type: integer
-    Error:
+    BatchCollection:
       type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
       properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     Event:
       type: object
       properties:
@@ -589,15 +609,6 @@ components:
           - deleted
         links:
           $ref: '#/components/schemas/Links'
-    BatchCollection:
-      type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
     EventCategory:
       type: object
       properties:
@@ -605,44 +616,33 @@ components:
           type: string
         name:
           type: string
-  parameters:
-    ContactId:
-      name: contactId
-      in: path
-      required: true
-      description: The ID of the contact.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
-    EventAlbumId:
-      name: eventAlbumId
-      in: path
-      required: true
-      description: The ID of the event album.
-      schema:
-        type: string
-    EventId:
-      name: eventId
-      in: path
-      required: true
-      description: The ID of the event.
-      schema:
-        type: string
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    DigitalRule:
+      type: object
+      properties:
+        id:
+          type: string
+        allowDownload:
+          type: boolean
+        watermarked:
+          type: boolean
+        maxDownloads:
+          type: integer
   responses:
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
       content:
         application/problem+json:
           schema:
