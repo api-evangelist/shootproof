@@ -198,40 +198,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BrandInput:
-      type: object
-      properties:
-        name:
-          type: string
-    BrandTheme:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        colors:
-          type: object
-          additionalProperties: true
-    BrandWatermark:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        image:
-          $ref: '#/components/schemas/BaseImage'
-    BaseImage:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-        width:
-          type: integer
-        height:
-          type: integer
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -251,6 +217,39 @@ components:
     Links:
       type: object
       additionalProperties: true
+    BrandHomepage:
+      type: object
+      properties:
+        headline:
+          type: string
+        aboutText:
+          type: string
+        aboutImage:
+          $ref: '#/components/schemas/BaseImage'
+    BrandWatermark:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/BaseImage'
+    BrandTheme:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        colors:
+          type: object
+          additionalProperties: true
+    BrandInput:
+      type: object
+      properties:
+        name:
+          type: string
     Brand:
       type: object
       properties:
@@ -262,18 +261,19 @@ components:
           type: string
         links:
           $ref: '#/components/schemas/Links'
-    BrandHomepage:
+    BaseImage:
       type: object
       properties:
-        headline:
+        url:
           type: string
-        aboutText:
-          type: string
-        aboutImage:
-          $ref: '#/components/schemas/BaseImage'
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    BadRequest:
+      description: Validation failure (most common error status code).
       content:
         application/problem+json:
           schema:
@@ -284,8 +284,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Validation failure (most common error status code).
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:

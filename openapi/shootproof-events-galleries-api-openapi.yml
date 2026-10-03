@@ -436,36 +436,23 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    ContactId:
-      name: contactId
-      in: path
-      required: true
-      description: The ID of the contact.
-      schema:
-        type: string
-    EventAlbumId:
-      name: eventAlbumId
-      in: path
-      required: true
-      description: The ID of the event album.
-      schema:
-        type: string
-    EventId:
-      name: eventId
-      in: path
-      required: true
-      description: The ID of the event.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
   schemas:
+    EventAlbum:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        name:
+          type: string
+        parentAlbumId:
+          type:
+          - string
+          - 'null'
+    Links:
+      type: object
+      additionalProperties: true
     EventAlbumInput:
       type: object
       required:
@@ -477,6 +464,49 @@ components:
           type:
           - string
           - 'null'
+    EventCategoryInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        eventDate:
+          type: string
+          format: date
+        categoryId:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - deleted
+        links:
+          $ref: '#/components/schemas/Links'
+    BatchCollection:
+      type: object
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    EventCategory:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
     Address:
       type: object
       properties:
@@ -492,35 +522,6 @@ components:
           type: string
         country:
           type: string
-    EventAlbum:
-      type: object
-      properties:
-        id:
-          type: string
-        eventId:
-          type: string
-        name:
-          type: string
-        parentAlbumId:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
     Contact:
       type: object
       properties:
@@ -543,34 +544,6 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-    Links:
-      type: object
-      additionalProperties: true
-    EventInput:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        eventDate:
-          type: string
-          format: date
-        categoryId:
-          type: string
-        status:
-          type: string
-          enum:
-          - active
-          - archived
-          - deleted
-    EventCategoryInput:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
     DigitalRuleInput:
       type: object
       properties:
@@ -580,42 +553,22 @@ components:
           type: boolean
         maxDownloads:
           type: integer
-    BatchCollection:
+    Error:
       type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
+      description: RFC 7807 problem-details error format used across the Studio API.
       properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    Event:
-      type: object
-      properties:
-        id:
+        type:
           type: string
-        name:
-          type: string
-        eventDate:
-          type: string
-          format: date
-        categoryId:
+        title:
           type: string
         status:
+          type: integer
+        detail:
           type: string
-          enum:
-          - active
-          - archived
-          - deleted
-        links:
-          $ref: '#/components/schemas/Links'
-    EventCategory:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
     DeleteResponse:
       type: object
       properties:
@@ -634,9 +587,56 @@ components:
           type: boolean
         maxDownloads:
           type: integer
+    EventInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        eventDate:
+          type: string
+          format: date
+        categoryId:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - deleted
+  parameters:
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      description: The ID of the event.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    BadRequest:
+      description: Validation failure (most common error status code).
       content:
         application/problem+json:
           schema:
@@ -647,8 +647,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Validation failure (most common error status code).
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:

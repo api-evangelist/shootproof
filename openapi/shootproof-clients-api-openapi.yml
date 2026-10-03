@@ -182,81 +182,32 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    ContactId:
-      name: contactId
-      in: path
-      required: true
-      description: The ID of the contact.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
+  responses:
+    Conflict:
+      description: The resource is in a state that does not allow the requested change.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    Address:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-    BasicEmailMessage:
-      type: object
-      required:
-      - subject
-      - body
-      properties:
-        subject:
-          type: string
-        body:
-          type: string
-        recipients:
-          type: array
-          items:
-            type: string
-            format: email
-    ContactInput:
-      type: object
-      required:
-      - firstName
-      - lastName
-      - email
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        tags:
-          type: array
-          items:
-            type: string
     Error:
       type: object
       description: RFC 7807 problem-details error format used across the Studio API.
@@ -298,31 +249,80 @@ components:
     Links:
       type: object
       additionalProperties: true
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Conflict:
-      description: The resource is in a state that does not allow the requested change.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Validation failure (most common error status code).
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    ContactInput:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        tags:
+          type: array
+          items:
+            type: string
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+  parameters:
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    ContactId:
+      name: contactId
+      in: path
+      required: true
+      description: The ID of the contact.
+      schema:
+        type: string
   securitySchemes:
     shootProofAuth:
       type: oauth2

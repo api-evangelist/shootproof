@@ -204,6 +204,54 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    Links:
+      type: object
+      additionalProperties: true
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        contactId:
+          type: string
+        status:
+          type: string
+          enum:
+          - open
+          - completed
+          - deleted
+        total:
+          type: number
+          format: float
+        links:
+          $ref: '#/components/schemas/Links'
+    OrderInput:
+      type: object
+      required:
+      - eventId
+      properties:
+        eventId:
+          type: string
+        contactId:
+          type: string
     DeleteResponse:
       type: object
       properties:
@@ -211,6 +259,19 @@ components:
           type: string
         deleted:
           type: boolean
+    OrderItemInput:
+      type: object
+      required:
+      - photoIds
+      properties:
+        photoIds:
+          type: array
+          items:
+            type: string
+        priceSheetItemId:
+          type: string
+        quantity:
+          type: integer
     BasicEmailMessage:
       type: object
       required:
@@ -239,80 +300,6 @@ components:
           type: string
         quantity:
           type: integer
-    Order:
-      type: object
-      properties:
-        id:
-          type: string
-        eventId:
-          type: string
-        contactId:
-          type: string
-        status:
-          type: string
-          enum:
-          - open
-          - completed
-          - deleted
-        total:
-          type: number
-          format: float
-        links:
-          $ref: '#/components/schemas/Links'
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
-    OrderInput:
-      type: object
-      required:
-      - eventId
-      properties:
-        eventId:
-          type: string
-        contactId:
-          type: string
-    Links:
-      type: object
-      additionalProperties: true
-    OrderItemInput:
-      type: object
-      required:
-      - photoIds
-      properties:
-        photoIds:
-          type: array
-          items:
-            type: string
-        priceSheetItemId:
-          type: string
-        quantity:
-          type: integer
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     OrderId:
       name: orderId
@@ -328,6 +315,19 @@ components:
       description: The ID of the brand.
       schema:
         type: string
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     shootProofAuth:
       type: oauth2

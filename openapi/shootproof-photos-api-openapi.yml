@@ -236,6 +236,25 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    Links:
+      type: object
+      additionalProperties: true
     DeleteResponse:
       type: object
       properties:
@@ -267,6 +286,13 @@ components:
           $ref: '#/components/schemas/BaseImage'
         links:
           $ref: '#/components/schemas/Links'
+    EventPhotoInput:
+      type: object
+      properties:
+        fileName:
+          type: string
+        status:
+          type: string
     BaseImage:
       type: object
       properties:
@@ -277,52 +303,12 @@ components:
           type: integer
         height:
           type: integer
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
-    Links:
-      type: object
-      additionalProperties: true
-    EventPhotoInput:
-      type: object
-      properties:
-        fileName:
-          type: string
-        status:
-          type: string
   parameters:
-    EventAlbumId:
-      name: eventAlbumId
-      in: path
-      required: true
-      description: The ID of the event album.
-      schema:
-        type: string
     EventId:
       name: eventId
       in: path
       required: true
       description: The ID of the event.
-      schema:
-        type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
       schema:
         type: string
     EventPhotoId:
@@ -332,15 +318,29 @@ components:
       description: The ID of the event photo.
       schema:
         type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
+    EventAlbumId:
+      name: eventAlbumId
+      in: path
+      required: true
+      description: The ID of the event album.
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The requested resource was not found.
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/problem+json:
           schema:
