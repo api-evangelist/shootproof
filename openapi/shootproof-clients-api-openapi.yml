@@ -182,48 +182,17 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Conflict:
-      description: The resource is in a state that does not allow the requested change.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Validation failure (most common error status code).
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    Links:
       type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
+      additionalProperties: true
+    DeleteResponse:
+      type: object
       properties:
-        type:
+        id:
           type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
+        deleted:
+          type: boolean
     Contact:
       type: object
       properties:
@@ -246,16 +215,52 @@ components:
             type: string
         links:
           $ref: '#/components/schemas/Links'
-    Links:
-      type: object
-      additionalProperties: true
-    DeleteResponse:
+    Address:
       type: object
       properties:
-        id:
+        line1:
           type: string
-        deleted:
-          type: boolean
+        line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
     ContactInput:
       type: object
       required:
@@ -278,49 +283,44 @@ components:
           type: array
           items:
             type: string
-    BasicEmailMessage:
-      type: object
-      required:
-      - subject
-      - body
-      properties:
-        subject:
-          type: string
-        body:
-          type: string
-        recipients:
-          type: array
-          items:
-            type: string
-            format: email
-    Address:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
+  responses:
+    BadRequest:
+      description: Validation failure (most common error status code).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: The resource is in a state that does not allow the requested change.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired OAuth 2.0 Bearer token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
     ContactId:
       name: contactId
       in: path
       required: true
       description: The ID of the contact.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
       schema:
         type: string
   securitySchemes:

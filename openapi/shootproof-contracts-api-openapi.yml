@@ -185,57 +185,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
-    Links:
-      type: object
-      additionalProperties: true
-    ContractTemplateInput:
-      type: object
-      required:
-      - name
-      - html
-      properties:
-        name:
-          type: string
-        html:
-          type: string
-    DeleteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-        deleted:
-          type: boolean
-    BasicEmailMessage:
-      type: object
-      required:
-      - subject
-      - body
-      properties:
-        subject:
-          type: string
-        body:
-          type: string
-        recipients:
-          type: array
-          items:
-            type: string
-            format: email
     ContractInput:
       type: object
       properties:
@@ -255,6 +204,57 @@ components:
           type: array
           items:
             type: string
+    Links:
+      type: object
+      additionalProperties: true
+    DeleteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        deleted:
+          type: boolean
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    BasicEmailMessage:
+      type: object
+      required:
+      - subject
+      - body
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+    ContractTemplateInput:
+      type: object
+      required:
+      - name
+      - html
+      properties:
+        name:
+          type: string
+        html:
+          type: string
     Contract:
       type: object
       properties:
@@ -289,21 +289,6 @@ components:
           type: string
         html:
           type: string
-  parameters:
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
-    ContractId:
-      name: contractId
-      in: path
-      required: true
-      description: The ID of the contract.
-      schema:
-        type: string
   responses:
     Unauthorized:
       description: Missing, invalid, or expired OAuth 2.0 Bearer token.
@@ -317,6 +302,21 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    ContractId:
+      name: contractId
+      in: path
+      required: true
+      description: The ID of the contract.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
+      schema:
+        type: string
   securitySchemes:
     shootProofAuth:
       type: oauth2

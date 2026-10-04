@@ -198,53 +198,9 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
     Links:
       type: object
       additionalProperties: true
-    BrandHomepage:
-      type: object
-      properties:
-        headline:
-          type: string
-        aboutText:
-          type: string
-        aboutImage:
-          $ref: '#/components/schemas/BaseImage'
-    BrandWatermark:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        image:
-          $ref: '#/components/schemas/BaseImage'
-    BrandTheme:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        colors:
-          type: object
-          additionalProperties: true
     BrandInput:
       type: object
       properties:
@@ -261,6 +217,25 @@ components:
           type: string
         links:
           $ref: '#/components/schemas/Links'
+    BrandHomepage:
+      type: object
+      properties:
+        headline:
+          type: string
+        aboutText:
+          type: string
+        aboutImage:
+          $ref: '#/components/schemas/BaseImage'
+    BrandTheme:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        colors:
+          type: object
+          additionalProperties: true
     BaseImage:
       type: object
       properties:
@@ -271,6 +246,31 @@ components:
           type: integer
         height:
           type: integer
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
+    BrandWatermark:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          $ref: '#/components/schemas/BaseImage'
   responses:
     BadRequest:
       description: Validation failure (most common error status code).

@@ -236,22 +236,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
+    BatchCollection:
       type: object
-      description: RFC 7807 problem-details error format used across the Studio API.
+      description: Envelope for batch create/update/delete operations across multiple items in one request.
       properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        info:
-          type: object
-          description: ShootProof extension carrying field-level validation errors.
-          additionalProperties: true
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     Links:
       type: object
       additionalProperties: true
@@ -262,15 +255,6 @@ components:
           type: string
         deleted:
           type: boolean
-    BatchCollection:
-      type: object
-      description: Envelope for batch create/update/delete operations across multiple items in one request.
-      properties:
-        items:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
     EventPhoto:
       type: object
       properties:
@@ -303,6 +287,22 @@ components:
           type: integer
         height:
           type: integer
+    Error:
+      type: object
+      description: RFC 7807 problem-details error format used across the Studio API.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        info:
+          type: object
+          description: ShootProof extension carrying field-level validation errors.
+          additionalProperties: true
   parameters:
     EventId:
       name: eventId
@@ -318,18 +318,18 @@ components:
       description: The ID of the event photo.
       schema:
         type: string
-    BrandId:
-      name: brandId
-      in: path
-      required: true
-      description: The ID of the brand.
-      schema:
-        type: string
     EventAlbumId:
       name: eventAlbumId
       in: path
       required: true
       description: The ID of the event album.
+      schema:
+        type: string
+    BrandId:
+      name: brandId
+      in: path
+      required: true
+      description: The ID of the brand.
       schema:
         type: string
   responses:
